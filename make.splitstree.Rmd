@@ -1,0 +1,73 @@
+---
+title: "Dicaeum splitstree"
+author: "Devon DeRaad"
+date: '2022-11-30'
+output: html_document
+---
+
+### read in your filtered vcf file
+```{r}
+library(vcfR)
+library(adegenet)
+library(StAMPP)
+#read vcf
+v<-read.vcfR("~/Desktop/phil.dicaeum/filtered.85.vcf")
+```
+
+### prepare input matrix
+```{r}
+#convert vcfR to genlight
+gen<-vcfR2genlight(v)
+#check sample names (remember the splitstree gui won't let you visualize more than 10 characters in a sample name, and all sample names must be unique)
+gen@ind.names
+#edit your sample names to fit this criteria
+gen@ind.names<-gsub("D_hypoleucum","hy", gen@ind.names)
+gen@ind.names<-gsub("D_nigrilore","ny", gen@ind.names)
+#double check sample names
+gen@ind.names
+
+#assign sample names as populations (population assignments are a requirement for the stampp functions, but can be arbitrary here because we want a pairwise divergence matrix among all samples, not samples assigned populations)
+pop(gen)<-gen@ind.names
+#make pairwise divergence matrix among all samples
+sample.div <- stamppNeisD(gen, pop = FALSE)
+
+#export for splitstree
+#stamppPhylip(distance.mat=sample.div, file="~/Desktop/phil.dicaeum/dicaeum.85.filtered.splits.txt")
+
+#open this file using the splitstree GUI. Take a screenshot and use the knitr function 'include_graphics' to show the resulting tree in this document alongside the code used to generate it:
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/phil.dicaeum.initial.splitstree.png")
+```
+
+### fiddle with the results
+```{r}
+#I don't like how the outgroup looks (weirdly nested within one of the clades on a super long branch)
+#Let's remove the outgroup and then revisualize the splitstree
+#remove two nigrilore samples from the vcf
+v.sub<-v[,colnames(v@gt) != "D_nigrilore_KU28413" & colnames(v@gt) != "D_nigrilore_KU28414"]
+```
+
+### redo with no outgroup
+```{r}
+#convert vcfR to genlight
+gen<-vcfR2genlight(v.sub)
+#fix sample names
+gen@ind.names<-gsub("D_hypoleucum","hy", gen@ind.names)
+#assign sample names as populations
+pop(gen)<-gen@ind.names
+#make pairwise divergence matrix among all samples
+sample.div <- stamppNeisD(gen, pop = FALSE)
+#export for splitstree
+#stamppPhylip(distance.mat=sample.div, file="~/Desktop/phil.dicaeum/dicaeum.85.nooutgroup.filtered.splits.txt")
+
+#open this file using the splitstree GUI. Take a screenshot and use the knitr function 'include_graphics' to show the resulting tree in this document alongside the code used to generate it:
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/splitstree.nooutgroup.png")
+```
+
+### Make this presentable for publication
+```{r}
+#at this point, I will edit the tree in the splitstree GUI to remove sample names and add dots on the end of each branch, which can be color-coded according to sample locality, giving me a nice, publication quality product
+#my final result:
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/splitstree.png")
+```
+
+
