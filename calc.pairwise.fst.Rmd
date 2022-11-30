@@ -1,0 +1,147 @@
+---
+title: "calc fst and fixed differences"
+author: "Devon DeRaad"
+date: '2022-11-30'
+output: html_document
+---
+
+### read in your filtered vcf file
+```{r}
+library(vcfR)
+library(adegenet)
+library(StAMPP)
+library(ggplot2)
+#read vcf
+v<-read.vcfR("~/Desktop/phil.dicaeum/filtered.85.vcf")
+#read in your sample info file
+pops<-read.csv("~/Desktop/phil.dicaeum/dicaeum.sampling.csv")
+#it should look roughly like this:
+head(pops)
+#retain only samples that passed all filtering protocols (assumes that the 'ID' column is identical to sample names in the vcf)
+pops<-pops[pops$ID %in% colnames(v@gt),]
+#reorder the sample info file to match the order of samples in the vcf
+pops<-pops[order(match(pops$ID,colnames(v@gt)[-1])),]
+```
+
+### I have already performed a principal components analysis, which separated the three groups perfectly based on geography
+```{r}
+#see PCA below
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/dicaeum.pca.png")
+
+#now I want to know the pairwise Fst between these three visible groups (only 3 total comparisons with three taxa)
+#start by removing the outgroup
+
+#remove two nigrilore samples from the vcf
+v.sub<-v[,colnames(v@gt) != "D_nigrilore_KU28413" & colnames(v@gt) != "D_nigrilore_KU28414"]
+#remove the two samples from the sample info file
+pops.sub<-pops[pops$ID != "D_nigrilore_KU28413" & pops$ID != "D_nigrilore_KU28414",]
+
+#convert vcfR to genlight
+gen<-vcfR2genlight(v.sub)
+
+#assign samples to the three groups shown above
+gen@pop<-as.factor(pops.sub$Taxa)
+#calculate pairwise Fst using the stampp package
+di.heat<-stamppFst(gen)
+#extract the pairwise matrix
+m<-di.heat$Fsts
+#fill in upper triangle of the matrix
+m[upper.tri(m)] <- t(m)[upper.tri(m)]
+
+#melt to tidy format for ggplotting
+heat <- reshape::melt(m)
+
+#plot as heatmap with exact values labeling each cell
+ggplot(data = heat, aes(x=X1, y=X2, fill=value)) + 
+  geom_tile()+
+  geom_text(data=heat,aes(label=round(value, 2)))+
+  theme_minimal()+
+  scale_fill_gradient2(low = "white", high = "red", space = "Lab", name="Fst") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text.y = element_text(angle = 45, hjust = 1))
+```
+
+### add in pairwise fixed differences
+```{r}
+#identify the number of fixed differences between pops
+#convert vcf to genotype matrix
+mat<-extract.gt(v.sub)
+conv.mat<-mat
+conv.mat[conv.mat == "0/0"]<-0
+conv.mat[conv.mat == "0/1"]<-1
+conv.mat[conv.mat == "1/1"]<-2
+conv.mat<-as.data.frame(conv.mat)
+#convert to matrix numeric
+for (i in 1:ncol(conv.mat)){
+  conv.mat[,i]<-as.numeric(as.character(conv.mat[,i]))
+}
+
+#compare colnames of the matrix to your popmap to verify you're subsetting correctly
+colnames(conv.mat) == pops.sub$ID #should be all true
+
+#make vector to fill with number of pairwise fixed diffs
+f<-c()
+
+#this generic for loop will calculate the number of fixed diffs between each of your designated pops
+for (i in 1:nrow(heat)){
+  #calc af of pop1 and pop2
+  pop1.af<-(rowSums(conv.mat[,pops.sub$Taxa == heat$X1[i]], na.rm=T)/(rowSums(is.na(conv.mat[,pops.sub$Taxa == heat$X1[i]]) == FALSE)))/2
+  pop2.af<-(rowSums(conv.mat[,pops.sub$Taxa == heat$X2[i]], na.rm=T)/(rowSums(is.na(conv.mat[,pops.sub$Taxa == heat$X2[i]]) == FALSE)))/2
+  #store number of fixed differences
+  f[i]<-sum(is.na(abs(pop1.af - pop2.af)) == FALSE & abs(pop1.af - pop2.af) == 1) #find fixed SNPs and add to vector
+}
+
+#make sure this worked correctly
+f
+
+#add number of fixed diffs to your existing df
+heat$fixed<-f
+
+### this code will get you the vector needed to combine FST values and fixed differences into a single vector split by 
+#define n as the number of taxa used in your pairwise Fst comparison
+n<-3 #here 3
+i<-1 #always begin incrementer (i) at 1
+x<-c() #always begin with an empty vector
+#while loop that will make the appropriate vector and store it in the variable 'x'
+while (i < n){
+  #the first set of numbers is simply 2:n
+  if(i == 1){
+    x<-c(2:n)
+    i=i+1
+  }
+  #the second set of numbers is (2+n+1):(2*n) which we add to the existing vector
+  if(i == 2){
+    x<-c(x,(2+n+1):(2*n))
+    i=i+1
+  }
+  
+    if(n == 3){break} #handle the edge case where n=3 and the code proceeds to the next step even though it is in violation of the outside while loop, because it tests all internal statements before looping back to the top to test the while loop condition
+  
+  #we then add (2+((i-1)*(n+1))):(i*n) to the vector, where i=3, incrememnt i by 1, and continue adding this vector to the growing vector until i = n-1
+  if(i > 2){
+    x<-c(x,(2+((i-1)*(n+1))):(i*n))
+    i=i+1
+  }
+}
+
+#order your Fst and fixed difference values correctly in a single mixed vector to plot the Fst values above and # of fixed differences below the diagonal in the heatmap, using the vector you just created (named 'x')
+heat$mixed<-heat$value
+heat$mixed[x]<-heat$fixed[x]
+
+#plot with labels
+ggplot(data = heat, aes(x=X1, y=X2, fill=value)) + 
+  geom_tile()+
+  geom_text(data=heat,aes(label=round(mixed, 2)), size=4)+
+  theme_minimal()+
+  scale_fill_gradient2(low = "white", high = "red", space = "Lab", name="Fst") +
+  theme(axis.text.x = element_text(angle = 45, vjust=.9, hjust = .9, size=12),
+        axis.text.y = element_text(angle = 45, hjust = 1, size=12),
+        axis.title.x = element_blank(), axis.title.y = element_blank())
+```
+
+### I'm going to put these values on the PCA using photoshop to make a single cohesive figure
+```{r}
+#see final product
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/pca.copy.png")
+```
+

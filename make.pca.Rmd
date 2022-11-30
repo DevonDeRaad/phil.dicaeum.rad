@@ -84,5 +84,11 @@ ggplot(di.pca.scores, aes(x=PC1, y=PC2)) +
   xlab("PC1, 11.2% variance explained")+
   ylab("PC2, 5.3% variance explained")+
   theme_classic()
+
+library(ggview)
+ggview(units="in", width=4.5, height=3)
+#ggsave(file="~/Desktop/phil.dicaeum/dicaeum.pca.pdf", units="in",width=4.5,height=3) #saves g
+
+
 ```
 
