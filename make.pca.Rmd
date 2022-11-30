@@ -1,0 +1,88 @@
+---
+title: "make PCA"
+author: "Devon DeRaad"
+date: '2022-11-30'
+output: html_document
+---
+
+### read in your filtered vcf file
+```{r}
+library(vcfR)
+library(adegenet)
+library(StAMPP)
+library(ggplot2)
+#read vcf
+v<-read.vcfR("~/Desktop/phil.dicaeum/filtered.85.vcf")
+#read in your sample info file
+pops<-read.csv("~/Desktop/phil.dicaeum/dicaeum.sampling.csv")
+#it should look roughly like this:
+head(pops)
+#retain only samples that passed all filtering protocols (assumes that the 'ID' column is identical to sample names in the vcf)
+pops<-pops[pops$ID %in% colnames(v@gt),]
+#reorder the sample info file to match the order of samples in the vcf
+pops<-pops[order(match(pops$ID,colnames(v@gt)[-1])),]
+```
+
+### use the adegenet package to perform PCA on a genlight object
+```{r}
+#convert vcfR to genlight
+gen<-vcfR2genlight(v)
+#perform PCA
+di.pca<-glPca(gen, nf=6)
+#isolate PCA scores as a dataframe
+di.pca.scores<-as.data.frame(di.pca$scores)
+#make sure your sample info file is identical in order to the resulting PCA output
+rownames(di.pca.scores) == pops$ID #all should return true
+#add in the relevant population identifier you would like to color-code by
+di.pca.scores$pop<-pops$Taxa
+
+#ggplot PCA colored by your identifier
+ggplot(di.pca.scores, aes(x=PC1, y=PC2, color=pop)) +
+  geom_point(cex = 5, alpha=.5)+
+  theme_classic()
+```
+
+### Remove the outgroup and repeat the procedure
+```{r}
+#remove two nigrilore samples from the vcf
+v.sub<-v[,colnames(v@gt) != "D_nigrilore_KU28413" & colnames(v@gt) != "D_nigrilore_KU28414"]
+#remove the two samples from the sample info file
+pops.sub<-pops[pops$ID != "D_nigrilore_KU28413" & pops$ID != "D_nigrilore_KU28414",]
+
+#convert vcfR to genlight
+gen<-vcfR2genlight(v.sub)
+#perform PCA
+di.pca<-glPca(gen, nf=6)
+#isolate PCA scores as a dataframe
+di.pca.scores<-as.data.frame(di.pca$scores)
+#make sure your sample info file is identical in order to the resulting PCA output
+rownames(di.pca.scores) == pops.sub$ID #all should return true
+#add in the relevant population identifier you would like to color-code by
+di.pca.scores$pop<-pops.sub$Taxa
+
+#ggplot PCA colored by your identifier
+ggplot(di.pca.scores, aes(x=PC1, y=PC2, color=pop)) +
+  geom_point(cex = 5, alpha=.5)+
+  theme_classic()
+
+#implement a custom color scheme
+ggplot(di.pca.scores, aes(x=PC1, y=PC2)) +
+  geom_point(aes(fill=pop), pch=21, size=5)+
+  scale_fill_manual(values=c("black", "grey", "white"))+
+  theme_classic()
+
+#if you want to add the proportion of variance explained by each principal component axis, you can calculate it like this:
+#porportion of variance explained by PC1
+di.pca[["eig"]][1]/sum(di.pca[["eig"]])
+#PC2
+di.pca[["eig"]][2]/sum(di.pca[["eig"]])
+
+#replot the PCA with that information included
+ggplot(di.pca.scores, aes(x=PC1, y=PC2)) +
+  geom_point(aes(fill=pop), pch=21, size=5)+
+  scale_fill_manual(values=c("black", "grey", "white"))+
+  xlab("PC1, 11.2% variance explained")+
+  ylab("PC2, 5.3% variance explained")+
+  theme_classic()
+```
+
