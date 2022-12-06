@@ -1,0 +1,107 @@
+---
+title: "make sampling maps dicaeum"
+author: "Devon DeRaad"
+date: '2022-12-05'
+output: html_document
+---
+
+### load packages
+```{r}
+#load packages
+library(vcfR)
+library(ggplot2)
+library(adegenet)
+library(SNPfiltR)
+library(StAMPP)
+library(viridis)
+library(rgeoboundaries)
+library(elevatr)
+library(raster)
+library(sf)
+library(ggpubr)
+```
+
+### read in data
+```{r}
+#read in your sample info file
+pops<-read.csv("~/Desktop/phil.dicaeum/dicaeum.retained.sampling.csv")
+#it should look roughly like this:
+head(pops)
+#remove outgroup
+pops<-pops[c(1:54,57:60),]
+table(pops$Latitude)
+```
+
+
+```{r}
+#make dataframe with only the 8 unique sampling locs
+unq<-pops[!duplicated(pops$Latitude),]
+
+#download elevation data for the Philippines
+phil_bound <- geoboundaries("Philippines")
+elevation_data <- get_elev_raster(locations = phil_bound, z = 6, clip = "locations")
+elevation_data <- as.data.frame(elevation_data, xy = TRUE)
+colnames(elevation_data)[3] <- "elevation"
+# remove rows of data frame with one or more NA's,using complete.cases
+elevation_data <- elevation_data[complete.cases(elevation_data), ]
+# remove rows of data frame where elevation is lower than 0, to distinguish land from sea
+elevation_data <- elevation_data[elevation_data$elevation >0,]
+
+#set how big you want boundaries around points to be
+g=1
+#make subset plotting area corresponding to our sampling
+#subset elevation data based on latitude and longitude limits
+elevation_data<-elevation_data[elevation_data$x >= min(unq$Longitude)-g & elevation_data$x <= max(unq$Longitude)+g &
+                              elevation_data$y >= min(unq$Latitude)-g & elevation_data$y <= max(unq$Latitude)+g,]
+
+#subset map outline based on limits
+phil_bound <- st_crop(phil_bound, xmin = min(unq$Longitude)-g, xmax = max(unq$Longitude)+g,
+                                    ymin = min(unq$Latitude)-g, ymax = max(unq$Latitude)+g)
+
+#plot the map with ggplot
+ggplot() +
+  geom_raster(data = elevation_data, aes(x = x, y = y, fill = elevation)) +
+  #geom_sf(data = phil_bound, color = "black", fill = NA, cex=.3) +
+  geom_point(data = unq, aes(x = Longitude, y = Latitude, color=Taxa), size=3, alpha =1, show.legend=FALSE) +
+  scale_color_manual(values=c("black","grey","white"))+
+  geom_point(data = unq, aes(x = Longitude, y = Latitude), shape = 21,size=3, colour = "black")+
+  #geom_text(data = unq, aes(x = long, y = lat, label = sample.loc), size = 6, color="white")+
+  #scale_fill_gradient(low = "white", high = "black")+
+  scale_fill_gradientn(colours = terrain.colors(50))+
+  labs(x = "Longitude", y = "Latitude", fill = "Elevation\n(meters)")+
+  theme_classic()+
+  theme(legend.position = c(0.75, 0.75), legend.justification = c(0.01, 0.01),
+        legend.background = element_blank())
+```
+
+### make dots sized according to sample size
+```{r}
+#add sample size for each point into the dataframe
+unq$sample.size<-as.vector(table(pops$Latitude)[order(match(names(table(pops$Latitude)),unq$Latitude))])
+#plot the map with ggplot
+ggplot() +
+  geom_raster(data = elevation_data, aes(x = x, y = y, fill = elevation)) +
+  #geom_sf(data = phil_bound, color = "black", fill = NA, cex=.3) +
+  geom_point(data = unq, aes(x = Longitude, y = Latitude, color=Taxa, size=sample.size), alpha=1, show.legend=FALSE) +
+  scale_color_manual(values=c("black","grey","white"))+
+  geom_point(data = unq, aes(x = Longitude, y = Latitude, size=sample.size), shape=21, colour="black")+
+  #geom_text(data = unq, aes(x = long, y = lat, label = sample.loc), size = 6, color="white")+
+  #scale_fill_gradient(low = "white", high = "black")+
+  scale_size(range = c(3,6))+
+  scale_fill_gradientn(colours = terrain.colors(50))+
+  labs(x = "Longitude", y = "Latitude", fill = "Elevation\n(meters)", size="sample size")+
+  theme_classic()+
+  theme(legend.position = c(0.77, 0.6), legend.justification = c(0.01, 0.01),
+        legend.background = element_blank())
+
+library(ggview)
+#ggview(units="in", width=5.3, height=11)
+#ggsave(file="~/Desktop/phil.dicaeum/dicaeum.sampling.map.pdf", units="in",width=5.3,height=11) #saves g
+```
+
+### Add species range outline in photoshop
+```{r}
+#see final product
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/dicaeum.fixed.sampling.png")
+```
+
