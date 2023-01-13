@@ -1,0 +1,137 @@
+---
+title: "Running SNAPP species trees"
+author: "Devon DeRaad"
+date: '2023-01-11'
+output: html_document
+---
+
+```{r}
+library(vcfR)
+library(SNPfiltR)
+
+#read in unlinked SNP dataset
+vcfR <- read.vcfR("~/Desktop/phil.dicaeum/filtered.85.unlinked.vcf")
+vcfR
+
+#get a list of samples present in the vcf to to subsample from
+pops<-read.csv("~/Desktop/phil.dicaeum/dicaeum.sampling.csv") #read in your sample info file
+#retain only samples that passed all filtering protocols (assumes that the 'ID' column is identical to sample names in the vcf)
+pops<-pops[pops$ID %in% colnames(vcfR@gt),]
+#reorder the sample info file to match the order of samples in the vcf
+pops<-pops[order(match(pops$ID,colnames(vcfR@gt)[-1])),]
+rownames(pops)<-2:61
+colnames(vcfR@gt)
+#look at file
+pops
+
+#use a for loop to randomly downsample 3 samples from each of the 3 lineages (exclude outgroup) 5 separate times
+for (i in 1:5){
+  #randomly sample 3 individuals from each of the 3 lineages
+  #remember that the first column of a vcfR object is 'INFO' and samples start in column 2
+  #manually set these ranges to match your sample order in your vcf, to make sure you sample each lineage separately
+  sample.specs<-c(sample(c(2,10,13:15,19,21,26:29,34:38,47,49),size = 3),
+                  sample(c(3,8,11,12,51,58,60),size = 3),
+                  sample(c(4:7,9,16:18,20,22:25,30:33,39:46,48,50,52:55,59,61),size = 3))
+
+  #subset the random samples plus the vcfR info (column 1)
+  vcf.sub <- vcfR[,c(1,sample.specs)]
+  #filter out invariant sites
+  vcf.comp<-min_mac(vcf.sub, min.mac = 1)
+  #write filtered subset vcf to disk
+  print(colnames(vcf.comp@gt)) #print sample names in retained vcf
+  print(pops$Taxa[sample.specs-1]) #print the assigned taxa for each sample to make sure we have subsampled correctly
+  #uncomment if you want to save a vcf for each replicate, rather than just a nexus
+  #vcfR::write.vcf(vcf.comp, file = paste0("~/Desktop/phil.dicaeum/snapp/rep",i,".vcf.gz")) #write to disk
+  #extract genotype matrix
+  vcf.gt<-extract.gt(vcf.comp, element = "GT", as.numeric = F, convertNA = T)
+  #convert 'NA' to '?'
+  vcf.gt[is.na(vcf.gt)]<-"?"
+  #convert '0/0' to '0'
+  vcf.gt[vcf.gt == "0/0"]<-"0"
+  #convert '0/1' to '1'
+  vcf.gt[vcf.gt == "0/1"]<-"1"
+  #convert '1/1' to '2'
+  vcf.gt[vcf.gt == "1/1"]<-"2"
+  #transpose matrix
+  vcf.gt <- t(vcf.gt)
+  #add lineages to sample names
+  rownames(vcf.gt)<-paste0(pops$Taxa[sample.specs-1],gsub("D_hypoleucum","",rownames(vcf.gt)))
+  #write to disk as nexus file
+  #commented out to prevent overwriting the nexus files I used for these analyses. Uncomment to write nexus files to disk
+  #ape::write.nexus.data(x = vcf.gt, file = paste0("~/Desktop/phil.dicaeum/snapp/rep",i,".nex"),format = "DNA", interleaved = FALSE)
+  }
+
+#read in last file read to disk, to check that it looks right
+nex.file <- scan(file=paste0("~/Desktop/phil.dicaeum/snapp/rep",i,".nex"), what = "character", sep = "\n",quiet = TRUE)
+nex.file
+```
+
+### use SED in a terminal window to change the data type from DNA to SNP
+```{bash, eval=FALSE}
+cd /Users/devder/Desktop/phil.dicaeum/snapp/
+sed -i '' "s/DNA/SNP/g" rep1.nex
+sed -i '' "s/DNA/SNP/g" rep2.nex
+sed -i '' "s/DNA/SNP/g" rep3.nex
+sed -i '' "s/DNA/SNP/g" rep4.nex
+sed -i '' "s/DNA/SNP/g" rep5.nex
+```
+
+### Now, open beauti and choose file > template > SNAPP. Import the first nexus as 'alignment', assign samples to tips, leave parameters default except, uncheck the box "Include non-polymorphic sites". Remove any calibrations in the 'Prior' window (if needed). Reduce chain length to 5M, and name tree and log filenames according to the specific replicate so they don't overwrite eachother. Then repeat for each nexus until all of your beauti .xml input files are ready for SNAPP.
+
+### Then start 5 replicate SNAPP runs as an array on the cluster using the following code:
+```{bash, eval=FALSE}
+#!/bin/sh
+#
+#SBATCH --job-name=snapp               # Job Name
+#SBATCH --nodes=1             # 40 nodes
+#SBATCH --ntasks-per-node=15               # 40 CPU allocation per Task
+#SBATCH --partition=bi            # Name of the Slurm partition used
+#SBATCH --chdir=/home/d669d153/work/phil.dicaeum/snapp    # Set working d$
+#SBATCH --mem-per-cpu=800            # memory requested
+#SBATCH --array=1-5
+#SBATCH --time=10000
+
+#run beast 2.7.1
+/home/d669d153/work/beast.2.7.1/beast/bin/beast -threads 15 rep$SLURM_ARRAY_TASK_ID.xml
+```
+
+### Use tracer to make sure each individual run achieved convergence
+```{r}
+#example of tracer output from a converged run. All ESS's > 200, and a stable trace plot for each parameter estimate
+knitr::include_graphics("/Users/devder/Desktop/example.trace.plot.png")
+```
+
+### Investigate whether individual runs converged on similar trees
+```{r}
+#rep1
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/snapp/rep1.png")
+#rep2
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/snapp/rep2.png")
+#rep3
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/snapp/rep.3.png")
+#rep4
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/snapp/rep4.png")
+#rep5
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/snapp/rep5.png")
+```
+
+### Because these replicates (each with different samples included) did not converge on the same topology, I will use TreeAnnotator to generate a maximum clade credibility tree for each replicate to assess the posterior probability of each recovered branching order
+```{r}
+#visualize each maximum clade credibility tree, discarding the first 1M generations as burn-in
+#rep1
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/snapp/rep1.con.tree.png")
+#rep2
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/snapp/rep2.con.tree.png")
+#rep3
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/snapp/rep3.con.tree.png")
+#rep4
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/snapp/rep4.con.tree.png")
+#rep5
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/snapp/rep5.con.tree.png")
+```
+
+### To get a sense of the overall consensus among all runs, I will use logcombiner to combine post-burnin trees from each iteration and visualize all trees sampled from the posterior distributions together on a single plot using densitree
+```{r}
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/snapp/all.reps.cloudogram.png")
+```
+
