@@ -1,0 +1,1 @@
+The file called 'DNA.extraction.protocol.md' outlines the magnetic bead based DNA extraction protocol used to extract genomic DNA from field preserved tissue samples for this project. The file called 'MSG.library.prep.details.doc' contains the details of the entire library prep process, which was performed at the [KU genome sequencing core](https://gsc.ku.edu/).
