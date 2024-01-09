@@ -1,0 +1,83 @@
+ID,Tissue,Species,Taxa,State,Specificlocality,Latitude,Longitude,Altitude,sample_details
+D_hypoleucum_18070,18070,hypoleucum,Luzon,Camarines Norte,"Luzon Island; Municipality Labo; Barangay Tulay na Lupa, Mt. Labo",14.039,122.786,580,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_18191,18191,hypoleucum,Zamboanga,,"Mindanao Island, City of Zamboanga; Brgy. Pasonanca, Pasonanca Nat. Park",7.018483,122.0273,750,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_14061,14061,hypoleucum,Mindanao,Dinagat,"Dinagat Island, Muncipality of Loreto, Brgy. Santiago, Sitio Cambinliw, Sudlon",10.34368,125.6181,200,dropped for lack of sequencing
+D_hypoleucum_14037,14037,hypoleucum,Mindanao,Dinagat,"Dinagat Island, Muncipality of Loreto, Brgy. Santiago, Sitio Cambinliw, Sudlon",10.34368,125.6181,200,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_14079,14079,hypoleucum,Mindanao,Dinagat,"Dinagat Island, Muncipality of Loreto, Brgy. Santiago, Sitio Cambinliw, Sudlon",10.34368,125.6181,200,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_14065,14065,hypoleucum,Mindanao,Dinagat,"Dinagat Island, Municipality Loreto, Brgy. Santiago, Sitio Cambinliu, Sudlon",10.34368,125.6181,190,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_27182,27182,hypoleucum,Mindanao,Unplaced,tankakan,6.46,125.0636,NA,dropped for lack of sequencing
+D_hypoleucum_14225,14225,hypoleucum,Mindanao,Eastern Samar,"Samar Island, Muncipality of Taft, Brgy. San Rafael",11.82912,125.2767,170,dropped for lack of sequencing
+D_hypoleucum_14120,14120,hypoleucum,Mindanao,Eastern Samar,"Samar Island, Muncipality of Taft, Brgy. San Rafael",11.8174,125.2779,200,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_17976,17976,hypoleucum,Luzon,Camarines Norte,"Luzon Island; Municipality Labo; Barangay Tulay na Lupa, Mt. Labo",14.039,122.786,580,dropped for a lack of homologous SNPs during SNP filtering process
+D_hypoleucum_18159,18159,hypoleucum,Zamboanga,,"Mindanao Island, City of Zamboanga; Brgy. Pasonanca, Pasonanca Nat. Park",7.018483,122.0273,750,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_14075,14075,hypoleucum,Mindanao,Dinagat,"Dinagat Island, Muncipality of Loreto, Brgy. Santiago, Sitio Cambinliw, Sudlon",10.34368,125.6181,200,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_20218,20218,hypoleucum,Luzon,Aurora,"Luzon Island, Aurora Memorial National Park",15.6851,121.3407,535,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_19066,19066,hypoleucum,Mindanao,Agusan del Sur,"Mindanao Island; Mun. San Francisco, Brgy. Bayugan 2; Mt. Magdiwata",8.473,125.986,490,dropped for a lack of homologous SNPs during SNP filtering process
+D_hypoleucum_19177,19177,hypoleucum,Zamboanga,Zamboanga City,Mindanao Island; Brgy. Tolosa; Sitio Santa Clara; Pasonanca Natural Park,7.1078,122.1195,604,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_19178,19178,hypoleucum,Zamboanga,Zamboanga City,Mindanao Island; Brgy. Tolosa; Sitio Santa Clara; Pasonanca Natural Park,7.1078,122.1194,600,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_14146,14146,hypoleucum,Mindanao,Eastern Samar,"Samar Island, Muncipality of Taft, Brgy. San Rafael",11.8174,125.2779,200,dropped for a lack of homologous SNPs during SNP filtering process
+D_hypoleucum_20213,20213,hypoleucum,Luzon,Aurora,"Luzon Island, Municipality of Maria Aurora, Barangay Villa Aurora, Sitio Damani",15.6851,121.3407,535,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_FMNH454949,FMNH454949,hypoleucum,Luzon,Luzon,"Mountain, Mt Amnyao",17,121,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_25637,25637,hypoleucum,Luzon,Ilocos Norte,"Luzon Island, Adams, Mt. Pao",18.438,120.878,750,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_1271,1271,hypoleucum,Mindanao,Mindanao,"Davao City, Mt. Talomo",7.042,125.338,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_1273,1273,hypoleucum,Mindanao,Mindanao,"Davao City, Mt. Talomo",7.042,125.338,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_1275,1275,hypoleucum,Mindanao,Mindanao,"Davao City, Mt. Talomo",7.042,125.338,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_25921,25921,hypoleucum,Luzon,Cagayan,"Luzon Island, Gonzaga, Mt. Cagua",18.219,122.111,780,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_3274,3274,hypoleucum,Mindanao,Mindanao,"Davao del Norte, Mt. Pasian",7.848,126.186,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_26984,26984,hypoleucum,Luzon,Cagayan,"Luzon Island, Gonzaga, Mt. Cagua",18.236,122.104,680,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_3208,3208,hypoleucum,Mindanao,Mindanao,"Davao del Norte, Mt. Pasian",7.848,126.186,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_3158,3158,hypoleucum,Mindanao,Mindanao,"Davao del Norte, Mt. Pasian",7.848,126.186,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_2253,2253,hypoleucum,Mindanao,Mindanao,"Sarangani, Mt Busa",6.109,124.666,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_3095,3095,hypoleucum,Mindanao,Mindanao,"Davao del Norte, Mt. Pasian",7.848,126.186,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_462070,462070,hypoleucum,Luzon,Luzon,"Camarines Sur, Lagonoy",13.7644,123.64458,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_25675,25675,hypoleucum,Luzon,Ilocos Norte,"Luzon Island, Adams, Mt. Pao",18.438,120.878,750,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_357614,357614,hypoleucum,Mindanao,Mindanao,"Bukidnon, Mt. Kitanglad Range",8,124.75,NA,dropped for lack of sequencing
+D_hypoleucum_454950,454950,hypoleucum,Luzon,Luzon,"Mountain, Mt Amnyao",17,121,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_25880,25880,hypoleucum,Luzon,Cagayan,"Luzon Island, Gonzaga, Mt. Cagua",18.219,122.111,780,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_3275,3275,hypoleucum,Mindanao,Mindanao,"Davao del Norte, Mt. Pasian",7.848,126.186,NA,dropped for lack of sequencing
+D_hypoleucum_357611,357611,hypoleucum,Mindanao,Mindanao,"Bukidnon, Mt. Kitanglad Range",8,124.75,NA,dropped for lack of sequencing
+D_hypoleucum_3314,3314,hypoleucum,Mindanao,Mindanao,"Davao del Norte, Mt. Pasian",7.848,126.186,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_357608,357608,hypoleucum,Mindanao,Mindanao,"Bukidnon, Mt. Kitanglad Range",8,124.75,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_17969,17969,hypoleucum,Luzon,Camarines Norte,"Luzon Island; Municipality Labo; Barangay Tulay na Lupa, Mt. Labo",14.039,122.786,580,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_357615,357615,hypoleucum,Mindanao,Mindanao,"Bukidnon, Mt. Kitanglad Range",8,124.75,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_357612,357612,hypoleucum,Mindanao,Mindanao,"Bukidnon, Mt. Kitanglad Range",8,124.75,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_19638,19638,hypoleucum,Luzon,Aurora,"Luzon Island, Municipality of San Luis, ca. 12 km WSW of Baler",15.64362,121.5149,1075,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_25868,25868,hypoleucum,Luzon,Cagayan,"Luzon Island, Gonzaga, Mt. Cagua",18.226,122.108,940,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_28584,28584,hypoleucum,Mindanao,Misamis Oriental,"Mindanao Island, Mt. Lumot",8.695,125.025,1236,dropped for lack of sequencing
+D_hypoleucum_25622,25622,hypoleucum,Luzon,Ilocos Norte,"Luzon Island, Adams, Mt. Pao",18.438,120.878,750,dropped for lack of sequencing
+D_hypoleucum_472816,472816,hypoleucum,Luzon,Luzon,"Rizal, Mt Irid",NA,NA,NA,dropped for lack of sequencing
+D_hypoleucum_25672,25672,hypoleucum,Luzon,Ilocos Norte,"Luzon Island, Adams, Mt. Pao",18.438,120.878,750,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_26975,26975,hypoleucum,Luzon,Cagayan,"Luzon Island, Gonzaga, Mt. Cagua",18.236,122.104,680,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_2229,2229,hypoleucum,Mindanao,,"Sarangani, Mt Busa",6.109,124.666,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_2067,2067,hypoleucum,Mindanao,,"Sarangani, Mt Busa",6.109,124.666,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_28273,28273,hypoleucum,Mindanao,Agusan del Norte,"Mindanao Island, Mt. Hilong-Hilong",9.075,125.665,500,dropped for lack of sequencing
+D_hypoleucum_28329,28329,hypoleucum,Mindanao,Agusan del Norte,"Mindanao Island, Mt. Hilong-Hilong",9.075,125.665,500,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_28361,28361,hypoleucum,Mindanao,Agusan del Norte,"Mindanao Island, Mt. Hilong-Hilong",9.063,125.673,1000,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_28376,28376,hypoleucum,Mindanao,Agusan del Norte,"Mindanao Island, Mt. Hilong-Hilong",9.062,125.673,1000,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_28588,28588,hypoleucum,Mindanao,Misamis Oriental,"Mindanao Island, Mt. Lumot",8.695,125.025,1236,dropped for lack of sequencing
+D_hypoleucum_2208,2208,hypoleucum,Mindanao,Mindanao,"Sarangani, Mt Busa",6.109,124.666,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_20214,20214,hypoleucum,Luzon,Aurora,"Luzon Island, Municipality of Maria Aurora, Barangay Villa Aurora, Sitio Damani",15.6851,121.3407,535,dropped for lack of sequencing
+D_hypoleucum_28294,28294,hypoleucum,Mindanao,Agusan del Norte,"Mindanao Island, Mt. Hilong-Hilong",9.075,125.665,500,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_1956,1956,hypoleucum,Mindanao,Mindanao,"Sarangani, Mt Busa",6.109,124.666,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_27471,27471,hypoleucum,Mindanao,Leyte,,NA,NA,NA,dropped for lack of sequencing
+D_hypoleucum_27468,27468,hypoleucum,Mindanao,Leyte,,NA,NA,NA,dropped for lack of sequencing
+D_hypoleucum_27454,27454,hypoleucum,Mindanao,Leyte,,NA,NA,NA,dropped for lack of sequencing
+D_hypoleucum_28596,28596,hypoleucum,Mindanao,Misamis Oriental,"Mindanao Island, Mt. Lumot",8.695,125.025,1236,dropped for lack of sequencing
+D_hypoleucum_25670,25670,hypoleucum,Luzon,Ilocos Norte,"Luzon Island, Adams, Mt. Pao",18.438,120.878,750,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_28599,28599,hypoleucum,Mindanao,Misamis Oriental,"Mindanao Island, Mt. Lumot",8.695,125.025,1236,dropped for lack of sequencing
+D_hypoleucum_20921,20921,hypoleucum,Mindanao,Bohol,"Bohol Island, Rajah Sikatuna Protected Landscape",9.7056,124.1234,400,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_20193,20193,hypoleucum,Luzon,Aurora,"Luzon Island, Aurora Memorial National Park",15.6851,121.3407,535,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_28416,28416,hypoleucum,Mindanao,Agusan del Norte,"Mindanao Island, Mt. Hilong-Hilong",9.064,125.684,1250,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_18193,18193,hypoleucum,Zamboanga,,"Mindanao Island, City of Zamboanga; Brgy. Pasonanca, Pasonanca Nat. Park",7.018483,122.0273,750,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_18188,18188,hypoleucum,Zamboanga,,"Mindanao Island, City of Zamboanga; Brgy. Pasonanca, Pasonanca Nat. Park",7.018483,122.0273,750,dropped for lack of sequencing
+D_hypoleucum_27450,27450,hypoleucum,Mindanao,Leyte,,10.405,125.131,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_19046,19046,hypoleucum,Mindanao,Agusan del Sur,"Mindanao Island; Mun. San Francisco, Brgy. Bayugan 2; Mt. Magdiwata",8.473,125.986,490,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_19136,19136,hypoleucum,Mindanao,Misamis Oriental,"Mindanao Island, Mt. Balatukan, Gingoog City, Brgy. Lunotan, Sitio San Isidro",8.7325,125.0035,1432,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_28663,28663,hypoleucum,Mindanao,,"Mindanao: Misamis Oriental Prov., Mt. Lumot",8.721,125.076,420,dropped based on apparent contamination ie outgroup clustering in a preliminary splitstree
+D_hypoleucum_28676,28676,hypoleucum,Mindanao,,"Mindanao: Misamis Oriental Prov., Mt. Lumot",8.721,125.076,420,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_29945,29945,hypoleucum,Zamboanga,,"Mindanao Island, City of Zamboanga, Labuyo Station, Pasonanca National Park",7.164,122.096,843,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_31636,31636,hypoleucum,Mindanao,Eastern Samar,"Samar Island, Municipality Taft, Brgy. San Rafael, DENR Field Station",11.828,125.276,180,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_29951,29951,hypoleucum,Zamboanga,,"Mindanao Island, City of Zamboanga, Labuyo Station, Pasonanca National Park",7.164,122.096,843,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_hypoleucum_31644,31644,hypoleucum,Mindanao,Eastern Samar,"Samar Island, Municipality Taft, Brgy. San Rafael, DENR Field Station",11.828,125.276,180,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_nigrilore_KU28413,KU28413,nigrilore,nigrilore,,,NA,NA,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses
+D_nigrilore_KU28414,KU28414,nigrilore,nigrilore,,,NA,NA,NA,One of 60 samples passing all filtering thresholds and included in downstream analyses

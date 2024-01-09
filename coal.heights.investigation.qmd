@@ -435,22 +435,65 @@ if(!is.null(out.table)){write.table(top.dist, file = out.table, sep = "\t", quot
 
 each time sample 10 random quartets and give the combined output across all iterations
 ```{r}
-raw.nj<-calc.heights.dummy(sl_aln, popmap, quartet.samps=10, model="raw", tree.builder="nj")
+raw.nj<-calc.heights(sl_aln, popmap, quartet.samps=10, model="raw", tree.builder="nj")
 ```
 
 ### "F84" divergence and "neighbor-joining" tree building
 ```{r}
-F84.nj<-calc.heights.dummy(sl_aln, popmap, quartet.samps=10, model="F84", tree.builder="nj")
+F84.nj<-calc.heights(sl_aln, popmap, quartet.samps=10, model="F84", tree.builder="nj")
 ```
 
 ### "raw" divergence and "UPGMA" tree building
 ```{r}
-raw.upgma<-calc.heights.dummy(sl_aln, popmap, quartet.samps=10, model="raw", tree.builder="upgma", out.table)
+raw.upgma<-calc.heights(sl_aln, popmap, quartet.samps=10, model="raw", tree.builder="upgma", out.table)
 ```
 
 ### "F84" divergence and "UPGMA" tree building
 ```{r}
-F84.upgma<-calc.heights.dummy(sl_aln, popmap, quartet.samps=10, model="F84", tree.builder="upgma", out.table)
+F84.upgma<-calc.heights(sl_aln, popmap, quartet.samps=10, model="F84", tree.builder="upgma", out.table)
 ```
+
+### Plot the distribution of coal heights under a 'raw NJ' framework across 100 random quartet samples
+
+```{r}
+#run 100 random samples
+raw.nj<-calc.heights(sl_aln, popmap, quartet.samps=100, model="raw", tree.builder="nj")
+
+#extract mean of each rep for each topology and plot histograms
+dist12<-c()
+dist23<-c()
+dist13<-c()
+for (i in 1:length(levels(as.factor(raw.nj$rand.samp)))){
+  #isolate this replicate
+  dist12[i]<-mean(raw.nj$sister.dist[raw.nj$rand.samp == i & raw.nj$topology == "12top"])
+  dist23[i]<-mean(raw.nj$sister.dist[raw.nj$rand.samp == i & raw.nj$topology == "23top"])
+  dist13[i]<-mean(raw.nj$sister.dist[raw.nj$rand.samp == i & raw.nj$topology == "13top"])
+}
+
+df<-data.frame(replicate=c(1:length(levels(as.factor(raw.nj$rand.samp)))),
+               dist12.means=dist12,
+               dist23.means=dist23,
+               dist13.means=dist13)
+
+c1 <- rgb(173,216,230,max = 255, alpha = 80, names = "lt.blue")
+c2 <- rgb(255,192,203, max = 255, alpha = 80, names = "lt.pink")
+c3 <- rgb(0,0,0, max = 255, alpha = 80, names = "lt.pink")
+
+hist(df$dist12.means, breaks = seq(0,0.02,.001), col=c1, xlim = c(0,0.02), xaxp=c(0,0.02,5), xlab = "mean raw dist", main = "sister topology coalescent heights\nblue=(P1,P2), pink=(P2,P3), gray=(P1,P3)")
+abline(v=mean(df$dist12.means), lty="dashed")
+
+hist(df$dist23.means, breaks = seq(0,0.02,.001), col=c2, xlim = c(0,0.02), xaxp=c(0,0.02,5), add=TRUE)
+abline(v=mean(df$dist23.means), lty="dashed")
+
+hist(df$dist13.means, breaks = seq(0,0.02,.001), col=c3, xlim = c(0,0.02), xaxp=c(0,0.02,5), add=TRUE)
+abline(v=mean(df$dist13.means), lty="dashed")
+
+hist(df$dist12.means, breaks = seq(0,0.02,.001), col=c1, xlim = c(0,0.02), xaxp=c(0,0.02,5), xlab = "mean raw dist", main = "sister topology coalescent heights\nblue=(P1,P2), pink=(P2,P3), gray=(P1,P3)")
+abline(v=mean(df$dist12.means), lty="dashed")
+
+hist(df$dist23.means, breaks = seq(0,0.02,.001), col=c2, xlim = c(0,0.02), xaxp=c(0,0.02,5), add=TRUE)
+abline(v=mean(df$dist23.means), lty="dashed")
+```
+
 
 
