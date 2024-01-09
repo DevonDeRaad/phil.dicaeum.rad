@@ -7,4 +7,4 @@ Reconstructing the true evolutionary history of the Buzzing Flowerpecker (*Dicae
 
 ### Sequence data to SNPs
 * All code used to optimize the *de novo* assembly parameters during the [Stacks](https://catchenlab.life.illinois.edu/stacks/) RAD locus assembly, processing, and SNP calling pipeline can be found in the folder called [sequence.data.to.snps](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/sequence.data.to.snps).
-* A detailed walk-through with corresponding visualizations of the parameter optimization process can be found [here](https://devonderaad.github.io/phil.dicaeum.rad/sequence.data.to.snps/optimize.denovo.dicaeum.assembly.html).
+* A detailed walk-through with corresponding visualizations of the parameter optimization process can be found [here](https://devonderaad.github.io/phil.dicaeum.rad/sequence.data.to.snps/optimize.denovo.diacaeum.assembly.html).
