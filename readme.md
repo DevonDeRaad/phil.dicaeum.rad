@@ -14,3 +14,16 @@ Reconstructing the true evolutionary history of the Buzzing Flowerpecker (*Dicae
 
 ### SNP filtering
 * We used the R packages [vcfR](https://knausb.github.io/vcfR_documentation/) and [SNPfiltR](https://devonderaad.github.io/SNPfiltR/) to optimize and implement a series of SNP filtering thresholds. This entire protocol can be viewed at: [https://devonderaad.github.io/phil.dicaeum.rad/dicaeum.snp.filtering.html](https://devonderaad.github.io/phil.dicaeum.rad/dicaeum.snp.filtering.html).
+
+### Sampling map
+* Detailed code showing how I created the sampling map shown in the text can be viewed at: [https://devonderaad.github.io/phil.dicaeum.rad/make.sampling.map.html](https://devonderaad.github.io/phil.dicaeum.rad/make.sampling.map.html).
+
+### Principal Components Analysis
+* A vignette style tutorial detailing how I created the genomic PCA and calculated pairwise FST and fixed differences between clusters can be viewed at: [https://devonderaad.github.io/phil.dicaeum.rad/make.pca.html](https://devonderaad.github.io/phil.dicaeum.rad/make.pca.html).
+
+### ADMIXTURE
+* All input and output files associated with the ADMIXTURE runs presented in the text can be found in the folder named [admixture.mac](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/admixture.mac). Additionally, a vignette style walk through of the process can be viewed [here](https://devonderaad.github.io/phil.dicaeum.rad/admixture.mac/run.admixture.html).
+
+### mtDNA phylogenetics
+* All input and output files associated mtDNA phylogenetic reconstructions can be found in the folder named [mtDNA.analyses]([https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/admixture.mac](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/mtDNA.analyses).
+
