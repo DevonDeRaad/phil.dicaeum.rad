@@ -1,0 +1,245 @@
+---
+title: "run ADMIXTURE on KU cluster"
+author: "Devon DeRaad"
+date: '2022-12-01'
+output: html_document
+---
+
+### read in thinned (i.e., linkage-filtered) vcf to r and remove outgroup
+```{r}
+library(vcfR)
+library(SNPfiltR)
+library(ggplot2)
+#read in thinned vcf
+v<-read.vcfR("~/Desktop/phil.dicaeum/filtered.85.unlinked.vcf")
+#must make chromosome names non-numeric for plink or it will throw an error
+v@fix[,1]<-paste("a", v@fix[,1], sep="")
+
+#remove outgroup samples
+v<-v[,colnames(v@gt) != "D_nigrilore_KU28413" & colnames(v@gt) != "D_nigrilore_KU28414"]
+#remove invariant sites
+v<-min_mac(v, min.mac = 1)
+#make another file with no singletons
+v.x<-min_mac(v, min.mac = 2)
+#write to disk
+#vcfR::write.vcf(v, file="~/Desktop/phil.dicaeum/thinned.nooutgroup.vcf.gz")
+#vcfR::write.vcf(v.x, file="~/Desktop/phil.dicaeum/thinned.nooutgroup.mac.vcf.gz")
+```
+
+### use this bash code to execute ADMIXTURE on the cluster
+```{bash, eval=FALSE}
+#use these bash commands to unzip the vcf files you just wrote out
+gunzip thinned.nooutgroup.vcf.gz
+gunzip thinned.nooutgroup.mac.vcf.gz
+
+#use this thinned vcf file to execute ADMIXTURE on the cluster using this script submitted as a slurm job:
+#!/bin/sh
+#
+#SBATCH --job-name=admixture               # Job Name
+#SBATCH --nodes=1             # 40 nodes
+#SBATCH --ntasks-per-node=10               # 40 CPU allocation per Task
+#SBATCH --partition=sixhour         # Name of the Slurm partition used
+#SBATCH --chdir=/home/d669d153/work/phil.dicaeum/admixture    # Set working d$
+#SBATCH --mem-per-cpu=1gb            # memory requested
+#SBATCH --time=360
+
+#use plink to convert vcf directly to bed format:
+/home/d669d153/work/plink --vcf thinned.nooutgroup.vcf --double-id --allow-extra-chr --make-bed --out binary_fileset
+#fix chromosome names
+cut -f2- binary_fileset.bim  > temp
+awk 'BEGIN{FS=OFS="\t"}{print value 1 OFS $0}' temp > binary_fileset.bim
+
+#run admixture for a K of 1-10, using cross-validation, with 10 threads
+for K in 1 2 3 4 5 6 7 8 9 10; 
+do /home/d669d153/work/admixture_linux-1.3.0/admixture --cv -j10 binary_fileset.bed $K | tee log${K}.out;
+done
+
+#Which K iteration is optimal according to ADMIXTURE ?
+grep -h CV log*.out > log.errors.txt
+```
+
+### visualize the results in R 
+```{r}
+#Now copy your entire admixture directory into your local machine, in bash, using a command like this:
+#scp -r d669d153@hpc.crc.ku.edu:/home/d669d153/work/phil.dicaeum/admixture /Users/devder/Desktop/phil.dicaeum/
+
+#read in ADMIXTURE results to R
+#setwd to the admixture directory you brought in from the cluster
+setwd("~/Desktop/phil.dicaeum/admixture")
+
+#read in log error values to determine optimal K
+log<-read.table("log.errors.txt")[,c(3:4)]
+#use double backslash to interpret the opening parentheses literally in the regular expression
+log$V3<-gsub("\\(K=", "", log$V3)
+log$V3<-gsub("):", "", log$V3)
+#interpret K values as numerical
+log$V3<-as.numeric(log$V3)
+#rename columns
+colnames(log)<-c("Kvalue","cross.validation.error")
+
+#make plot showing the cross validation error across K values 1:10
+ggplot(data=log, aes(x=Kvalue, y=cross.validation.error, group=1)) +
+  geom_line(linetype = "dashed")+
+  geom_point()+
+  ylab("cross-validation error")+
+  xlab("K")+
+  scale_x_continuous(breaks = c(1:10))+
+  theme_classic()
+#lowest CV value is the ideal K value
+```
+
+### visualize results as bar charts
+```{r}
+#setwd to the admixture directory you brought in from the cluster
+setwd("~/Desktop/phil.dicaeum/admixture")
+
+#read in input file
+sampling<-read.table("binary_fileset.fam")[,1]
+#get list of input samples in order they appear
+sampling
+
+#read in all ten runs and save each dataframe in a list
+runs<-list()
+#read in log files
+for (i in 1:10){
+  runs[[i]]<-read.table(paste0("binary_fileset.", i, ".Q"))
+}
+
+#plot each run
+par(mfrow=c(1,1))
+for (i in 1:5){
+barplot(t(as.matrix(runs[[i]])), col=rainbow(i), ylab="Ancestry", border="black")
+}
+
+#read in sample data
+pops<-read.csv("~/Desktop/phil.dicaeum/dicaeum.sampling.csv")
+pops<-pops[pops$ID %in% colnames(v@gt),]
+pops$Taxa[c(23,38,39,43,45)]<-"mtbusa"
+#reorder the sample info file to match the order of samples in the vcf
+pops<-pops[order(match(pops$ID,colnames(v@gt)[-1])),]
+pops$Taxa[order(pops$Taxa)]
+#check sample order
+pops$ID[order(pops$Taxa)]
+
+#reorder samples based on sampling locality for k=2/3
+runs[[2]]<-runs[[2]][order(pops$Taxa),]
+runs[[3]]<-runs[[3]][order(pops$Taxa),]
+#plot barplots for the two most relevant runs
+barplot(t(as.matrix(runs[[2]])), col=c("#B2182B","#4D4D4D"), ylab="Ancestry", border="black")
+barplot(t(as.matrix(runs[[3]])), col=c("#B2182B","#4D4D4D","black"), ylab="Ancestry", border="black")
+```
+
+### Repeat with singletons removed
+```{bash, eval=FALSE}
+#use this thinned vcf file to execute ADMIXTURE on the cluster using this script submitted as a slurm job:
+#!/bin/sh
+#
+#SBATCH --job-name=admixture               # Job Name
+#SBATCH --nodes=1             # 40 nodes
+#SBATCH --ntasks-per-node=10               # 40 CPU allocation per Task
+#SBATCH --partition=sixhour         # Name of the Slurm partition used
+#SBATCH --chdir=/home/d669d153/work/phil.dicaeum/admixture.mac    # Set working d$
+#SBATCH --mem-per-cpu=1gb            # memory requested
+#SBATCH --time=360
+
+#use plink to convert vcf directly to bed format:
+/home/d669d153/work/plink --vcf thinned.nooutgroup.mac.vcf --double-id --allow-extra-chr --make-bed --out binary_fileset
+#fix chromosome names
+cut -f2- binary_fileset.bim  > temp
+awk 'BEGIN{FS=OFS="\t"}{print value 1 OFS $0}' temp > binary_fileset.bim
+
+#run admixture for a K of 1-10, using cross-validation, with 10 threads
+for K in 1 2 3 4 5 6 7 8 9 10; 
+do /home/d669d153/work/admixture_linux-1.3.0/admixture --cv -j10 binary_fileset.bed $K | tee log${K}.out;
+done
+
+#Which K iteration is optimal according to ADMIXTURE ?
+grep -h CV log*.out > log.errors.txt
+```
+
+### visualize the results in R 
+```{r}
+#Now copy your entire admixture directory into your local machine, in bash, using a command like this:
+#scp -r d669d153@hpc.crc.ku.edu:/home/d669d153/work/phil.dicaeum/admixture.mac /Users/devder/Desktop/phil.dicaeum/
+
+#read in ADMIXTURE results to R
+#setwd to the admixture directory you brought in from the cluster
+setwd("~/Desktop/phil.dicaeum/admixture.mac")
+
+#read in log error values to determine optimal K
+log<-read.table("log.errors.txt")[,c(3:4)]
+#use double backslash to interpret the opening parentheses literally in the regular expression
+log$V3<-gsub("\\(K=", "", log$V3)
+log$V3<-gsub("):", "", log$V3)
+#interpret K values as numerical
+log$V3<-as.numeric(log$V3)
+#rename columns
+colnames(log)<-c("Kvalue","cross.validation.error")
+
+#make plot showing the cross validation error across K values 1:10
+ggplot(data=log, aes(x=Kvalue, y=cross.validation.error, group=1)) +
+  geom_line(linetype = "dashed")+
+  geom_point()+
+  ylab("cross-validation error")+
+  xlab("K")+
+  scale_x_continuous(breaks = c(1:10))+
+  theme_classic()
+#lowest CV value is the ideal K value
+```
+
+### visualize results as bar charts
+```{r}
+#setwd to the admixture directory you brought in from the cluster
+setwd("~/Desktop/phil.dicaeum/admixture.mac")
+
+#read in input file
+sampling<-read.table("binary_fileset.fam")[,1]
+#get list of input samples in order they appear
+sampling
+
+#read in all ten runs and save each dataframe in a list
+runs<-list()
+#read in log files
+for (i in 1:10){
+  runs[[i]]<-read.table(paste0("binary_fileset.", i, ".Q"))
+}
+
+#plot each run
+par(mfrow=c(1,1))
+for (i in 1:5){
+barplot(t(as.matrix(runs[[i]])), col=rainbow(i), ylab="Ancestry", border="black")
+}
+
+#reorder samples based on sampling locality for k=2/3
+pops<-read.csv("~/Desktop/phil.dicaeum/dicaeum.sampling.csv")
+pops<-pops[pops$ID %in% colnames(v@gt),]
+pops$Taxa[c(23,38,39,43,45)]<-"mtbusa"
+#reorder the sample info file to match the order of samples in the vcf
+pops<-pops[order(match(pops$ID,colnames(v@gt)[-1])),]
+pops$Taxa[order(pops$Taxa)]
+#check sample order
+pops$ID[order(pops$Taxa)]
+
+runs[[2]]<-runs[[2]][order(pops$Taxa),]
+runs[[3]]<-runs[[3]][order(pops$Taxa),]
+#plot barplots for the two most relevant runs
+barplot(t(as.matrix(runs[[2]])), col=c("white","gray"), ylab="Ancestry", border="black")
+barplot(t(as.matrix(runs[[3]])), col=c("black","gray","white"), ylab="Ancestry", border="black")
+
+#these look cleaner, we will use these for publication
+
+#save barplots
+#pdf("~/Desktop/phil.dicaeum/admixture/admix.plots.pdf", width = 8, height=3.3)
+#par(mfrow=c(2,1))
+#par(mar = c(3, 3, 0, 0), oma = c(1, 1, 1, 1)) #set margins
+#barplot(t(as.matrix(runs[[2]])), col=c("white","gray"), ylab="Ancestry", border="black")
+#barplot(t(as.matrix(runs[[3]])), col=c("black","gray","white"), ylab="Ancestry", border="black")
+#dev.off()
+```
+
+### cleaned up version
+```{r}
+#see final product
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/admix.barplots.png")
+```
+
