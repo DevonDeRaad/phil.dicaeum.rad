@@ -10,4 +10,4 @@
 * The input file prepared using *beauti* for performing a reconstruction with a relaxed clock (exponential prior) and HKY substitution model is called 'relaxed.HKY.xml'. The optimal tree, the log file used to check convergence, etc. for this run all begin with the prefix 'relaxed.HKY'.
 
 ### IQ-TREE 2
-* The details for maximum-likelihood phylogenetic reconstruction using IQ-TREE 2 can be found in the folder called 'iqtree'.
+* The details for maximum-likelihood phylogenetic reconstruction using IQ-TREE 2 can be found in the folder called [iqtree](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/mtDNA.analyses/iqtree).
