@@ -1,0 +1,2 @@
+# IQ-TREE 2 genomic reconstruction
+* All input and output files associated with running IQ-TREE on this dataset are contained in this repository. The concatenated phylip file containing 2,590 loci (including invariant sites) passing filtering, which was used for input, is called 'pops.phy'. The file 'pops.phy.iqtree' contains information about the automatic model selection process, and the file called 'pops.phy.contree' contains the consensus tree with bootstrap support values.
