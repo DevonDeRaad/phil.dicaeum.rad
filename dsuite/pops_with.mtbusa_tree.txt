@@ -1,0 +1,2 @@
+P1	P2	P3	Dstatistic	Z-score	p-value	f4-ratio	BBAA	ABBA	BABA
+Zamboanga	Mindanao	Luzon	0.0854981	2.50336	0.00615096	0.23961	108.983	103.843	87.4852

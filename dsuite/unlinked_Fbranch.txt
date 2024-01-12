@@ -1,0 +1,5 @@
+branch	branch_descendants	Outgroup	Luzon	Zamboanga	Mindanao
+b2	Zamboanga,Mindanao	nan	nan	nan	nan
+b3	Luzon	nan	nan	nan	nan
+b4	Zamboanga	nan	0	nan	nan
+b5	Mindanao	nan	0.23961	nan	nan
