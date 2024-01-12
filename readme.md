@@ -27,3 +27,9 @@ Reconstructing the true evolutionary history of the Buzzing Flowerpecker (*Dicae
 ### mtDNA phylogenetics
 * All input and output files associated mtDNA phylogenetic reconstructions can be found in the folder named [mtDNA.analyses]([https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/admixture.mac](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/mtDNA.analyses).
 
+### IQ-TREE 2 reconstruction
+* The input and output files from the genomic phylogenetic reconstruction for all samples using IQ-TREE 2 can be found in the folder called [iqtree](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/iqtree). A detailed walkthrough of the entire process is available [here](https://devonderaad.github.io/phil.dicaeum.rad/iqtree/run.iqtree.html).
+
+### Unrooted phylogenetic network reconstruction
+* A walkthrough of the process of creating the splitstree can be viewed at: [https://devonderaad.github.io/phil.dicaeum.rad/make.splitstree.html](https://devonderaad.github.io/phil.dicaeum.rad/make.splitstree.html).
+
