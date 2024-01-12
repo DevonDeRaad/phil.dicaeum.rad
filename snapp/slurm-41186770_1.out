@@ -1,0 +1,118 @@
+[0.898s][warning][os,container] Duplicate cpuset controllers detected. Picking /sys/fs/cgroup/cpuset, skipping /cgroup/cpuset.
+
+                   BEAST v2.7.2 Prerelease, 2002-2022
+             Bayesian Evolutionary Analysis Sampling Trees
+                       Designed and developed by
+ Remco Bouckaert, Alexei J. Drummond, Andrew Rambaut & Marc A. Suchard
+                                    
+                   Centre for Computational Evolution
+                         University of Auckland
+                       r.bouckaert@auckland.ac.nz
+                        alexei@cs.auckland.ac.nz
+                                    
+                   Institute of Evolutionary Biology
+                        University of Edinburgh
+                           a.rambaut@ed.ac.uk
+                                    
+                    David Geffen School of Medicine
+                 University of California, Los Angeles
+                           msuchard@ucla.edu
+                                    
+                      Downloads, Help & Resources:
+                           http://beast2.org/
+                                    
+  Source code distributed under the GNU Lesser General Public License:
+                   http://github.com/CompEvol/beast2
+                                    
+                           BEAST developers:
+   Alex Alekseyenko, Trevor Bedford, Erik Bloomquist, Joseph Heled, 
+ Sebastian Hoehna, Denise Kuehnert, Philippe Lemey, Wai Lok Sibon Li, 
+Gerton Lunter, Sidney Markowitz, Vladimir Minin, Michael Defoin Platel, 
+          Oliver Pybus, Tim Vaughan, Chieh-Hsi Wu, Walter Xie
+                                    
+                               Thanks to:
+          Roald Forsberg, Beth Shapiro and Korbinian Strimmer
+
+Random number seed: 1673532868298
+
+File: rep1.xml seed: 1673532868298 threads: 15
+Loading package BEAST.base v2.7.2 BEAST.app v2.7.2 SNAPP v1.6.1 ORC v1.1.1 starbeast3 v1.1.3 BEASTLabs v2.0.0 SA v2.1.0    
+Luzon_18070: 671 4
+Luzon_26984: 671 4
+Luzon_FMNH454949: 671 4
+Mindanao_1275: 671 4
+Mindanao_2253: 671 4
+Mindanao_28416: 671 4
+Zamboanga_18159: 671 4
+Zamboanga_19178: 671 4
+Zamboanga_29945: 671 4
+Alignment(rep1)
+  9 taxa
+  671 sites
+  345 patterns
+
+WARNING: there is a sequence with a state count larger than 2.
+If this XML file was generated with BEAUti, this is most likely wrong.
+To fix this, change totalCount in the XML to 2 for binary sequences, or 3 for diploid data.
+WARNING: there is a sequence with a state count larger than 2.
+If this XML file was generated with BEAUti, this is most likely wrong.
+To fix this, change totalCount in the XML to 2 for binary sequences, or 3 for diploid data.
+WARNING: there is a sequence with a state count larger than 2.
+If this XML file was generated with BEAUti, this is most likely wrong.
+To fix this, change totalCount in the XML to 2 for binary sequences, or 3 for diploid data.
+Mindanao: 671 10
+Luzon: 671 10
+Zamboanga: 671 10
+Data(snap.rep1)
+  3 taxa
+  671 sites
+  69 patterns
+
+Seq: seq_Mindanao_2253
+Seq: seq_Mindanao_1275
+Seq: seq_Mindanao_28416
+Seq: seq_Luzon_FMNH454949
+Seq: seq_Luzon_26984
+Seq: seq_Luzon_18070
+Seq: seq_Zamboanga_19178
+Seq: seq_Zamboanga_18159
+Seq: seq_Zamboanga_29945
+WARNING: removed 2 patterns (2 sites) because they have one or more branches without data.
+Mindanao: 669 10
+Luzon: 669 10
+Zamboanga: 669 10
+3 taxa
+669 sites
+167 patterns
+Rate prior = gamma
+Log Likelihood Correction = -2185.049904504031
+===============================================================================
+Citations for this model:
+
+Bouckaert, Remco, Timothy G. Vaughan, Joëlle Barido-Sottani, Sebastián Duchêne, Mathieu Fourment, 
+Alexandra Gavryushkina, Joseph Heled, Graham Jones, Denise Kühnert, Nicola De Maio, Michael Matschiner, 
+Fábio K. Mendes, Nicola F. Müller, Huw A. Ogilvie, Louis du Plessis, Alex Popinga, Andrew Rambaut, 
+David Rasmussen, Igor Siveroni, Marc A. Suchard, Chieh-Hsi Wu, Dong Xie, Chi Zhang, Tanja Stadler, 
+Alexei J. Drummond 
+  BEAST 2.5: An advanced software platform for Bayesian evolutionary analysis. 
+  PLoS computational biology 15, no. 4 (2019): e1006650.
+
+David Bryant, Remco Bouckaert, Joseph Felsenstein, Noah Rosenberg, Arindam RoyChoudhury. Inferring Species Trees Directly from Biallelic Genetic Markers: Bypassing Gene Trees in a Full Coalescent Analysis. Mol. Biol. Evol. 29(8):1917-1932, 2012
+
+===============================================================================
+Start likelihood: -5751.584177174787 
+Writing file rep1.log
+Trying to write file rep2.trees but the file already exists (perhaps use the -overwrite flag?).
+Overwrite (Y=yes/N=no/A=overwrite all)?:
+java.lang.NullPointerException: Cannot invoke "String.toLowerCase()" because "<local3>" is null
+	at beast.base.inference.Logger.openLogFile(Unknown Source)
+	at beast.base.inference.Logger.init(Unknown Source)
+	at beast.base.inference.MCMC.run(Unknown Source)
+	at beastfx.app.beast.BeastMCMC.run(Unknown Source)
+	at beastfx.app.beast.BeastMain.main(Unknown Source)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.base/java.lang.reflect.Method.invoke(Unknown Source)
+	at beast.pkgmgmt.launcher.BeastLauncher.run(Unknown Source)
+	at beast.pkgmgmt.launcher.BeastLauncher.main(Unknown Source)

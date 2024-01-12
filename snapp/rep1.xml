@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast beautitemplate='SNAPP' beautistatus='' namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.base.evolution.alignment:beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.tree.coalescent:beast.pkgmgmt:beast.base.core:beast.base.inference.util:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood" required="BEAST.base v2.7.3:SNAPP v1.6.1" version="2.7">
+
+    <data
+id="rep1"
+spec="Alignment"
+dataType="integer"
+name="rawdata">
+        <sequence id="seq_Luzon_18070" spec="Sequence" taxon="Luzon_18070" totalcount="4" value="0010??00?01?0?01001100000?00000102?00200000011001000?000010000000000000000001000010000?0012?20000?010000000000002001000000011?1100000000000000000100?00000000000000001010?001?000000010?001000000000000000001020000011000000?0000000000000001?10000000?000000010000010?0000100000010100020000001000010000000010000?1001002000001010012010000000110021001000000001000000?0000101000100?000001?00001000100000010010100000000000000001000000001000?0000000000002020001100000010010001000001000100020000000?00??0101?000000000001?000020010000002000110100000000002?000110000100000110000100110200110000?0?1000201?000000000?0010010?01000000020010101012000?00000000001000000100010100210000000010"/>
+        <sequence id="seq_Luzon_26984" spec="Sequence" taxon="Luzon_26984" totalcount="4" value="000200010000000100010100000100100010100000001000000100010?01020011100000?02000001?00100011100001000?000?01010?000100000000000000000000?001020020020001010000000?00000010020000010000000000000000000002000210002000?00000?0001000?0100000100002020100101001000000010000?000000000000020000000000002000000001102002?2000001000000002?0000000000010000000010000111000012000002010000201010?0000000000001000120000000?00000010000000011?0000001001000002220?000010010?00000?000000000200000000000?000010001011000000100000000100?0000002000001110??0?200100000000000000010010000010000000210000000202010101000110010000000000010001001000?001000001200202010?0100000001011000010?002000000000000?02"/>
+        <sequence id="seq_Luzon_FMNH454949" spec="Sequence" taxon="Luzon_FMNH454949" totalcount="4" value="0001?000?0010?000?0?1?00020000000?0000000000000000000000?0?00000?0?00?0000?0?2000?201?001010000200000?0?00000000?000?0?000?001?0?00?0?00000?000?000?200000?020?00??0??00??100000000?0000?100?00000001?1000?000200??10000201000?000?001000?0002?0?000?0?0?00200000?00?110?200000000000000000010001000?1?000?00?0?0010??0?01?00?000000?000?002000000100000??001?0???0000??00?00?0000000002000?00?00000?0002010000002100?0200000010??0000?0010?0000000?00101?0011?01?02010?0010000?0001000?000002??0?0??0000?00000000010?0000?000?0?1000000200001000220?0??0000??20100000000?11000000000??0000?0000?00?0000100?00000?0?01000?0?00100002?1000010?00???2010010001010000200000101001000?02000000?0100"/>
+        <sequence id="seq_Mindanao_1275" spec="Sequence" taxon="Mindanao_1275" totalcount="4" value="000000100??0000?00000?000?0000000011000110110?00010?000000?00?000000?2000100001100020010010100000000?0?010?0?000000001011?020000100?00000000000??0?00?0001020?001100000010?00?000?000?00??0012?0000?0000?0?00?00?02000??0?0000?10?0?00010?10002010?00?000000000001?0?00??010?000000?0?10?002010?00000?0?10000000000?00?00?0?00100?0000000?0001?0000002????0200?00100010000??0001??00?2000?1000??00100000?0??0100110?10000000?001001?10?1100210010000000?00100??0010000?001010?02?10002000000?1?001011001?0100000?010?002?0?00?001010??00000000?000100?110??0?000?0000001?00?0?00000?0??100111?00?20000??0?000?0100010???20?0?0010000??0?00000000?0?010001210?1?200?00????000000?000001?0?100002"/>
+        <sequence id="seq_Mindanao_2253" spec="Sequence" taxon="Mindanao_2253" totalcount="4" value="1100200000000?10100010000000000000000?00?110?00200?0000?0000000000?100000?10?000?1000?0?000000000?01100100000010200?000100?1?0100010010?00000002?00??0000000010000200000?002000011210000000?0?110001000000000200000000000001?000010000?0020??100100?10100000000100?00000002?0011?000?0100000000000000000?2?00?00000001?100000010?00000?000000010000?0?001000000100000000?0000100020?02000000??00000?00000001000???000?0000010000102121100?02?0?0?00000000000100000000000000000??01000000?0?010000000?00?0000012000?0?010?001001000000000201000002210000?0000000?01?201010?0020000??1002?101100001000000?00000000011000000001000?10?00110000100000000200001?0001010200000000?00000?0100110000100"/>
+        <sequence id="seq_Mindanao_28416" spec="Sequence" taxon="Mindanao_28416" totalcount="4" value="?00002?010200002000010?0100002?00010000200200010100001001010201000??00001000000100000010020100101000020100000200000100100010001001001001000000000000000010010001000010000001000000?0001100000000000000?000010000?200001000?0000000000?000002?0?0000000020000?000010000?0000000?112?12100000?0010?011002000000111000010000000?10001110000000010000000001002100000200000001000010002000110?00?0020000000100000000000020020011100000000100?00?00010100000000002000000000000?000100001000200110000111000000000000010000001000020?00000100001101000000210000020001000001000020?0000000010?00000??0?020000000?0000100010000001010001000?00020020?0000000?00100020?0000010000?000000000000200002000100"/>
+        <sequence id="seq_Zamboanga_18159" spec="Sequence" taxon="Zamboanga_18159" totalcount="4" value="0202000000002202010000?2001?000010000010??100000??0000100000000100001?0100000000000?020002000011002002?200?000000010200?0000000000020??02010200010000?0000000000000000200001001000002000?00100021100000??00000?00000000020000?2010021020000002002010000020000?00?010000020002002000000020?00020000000?00000020000000000000122?00?00000?01010?00001000?0000000000001000?001020000?00002002200020100010000000000000000010000001020002000000001000002100000?10000000100001010120020202000?0002020020000011000010200010000001000?0010000101020000000010001000010?00000000?0?0000000002101?100?000000000120001000010000002?0011022000001000000000100010002000001001?000000021002000000100000000021?0"/>
+        <sequence id="seq_Zamboanga_19178" spec="Sequence" taxon="Zamboanga_19178" totalcount="4" value="020201000100210202000012?000000000000000?000000?00200020000000000000000100000000000002??0?000020?110002200?01?01002010010201000000020?0020002100000200100110001000010020100100000000200?001000021200000020000010000000002000010001010020?0000200202??0001010020020000001210011000000000201100?000000000100002000000000000022000020?0002001000000?20000000000000000?00021000201000000020002002?0000010001000010202000000000000020002000000002000002000001000000000200?022002?00202020001000202002000000000000110000?00000000000020000002010000?110000010?000100000000000000?000?00000?000000?01000000210000000200000000101202202?0010100000002000000020?0?1100000000000210110100?022000000012000"/>
+        <sequence id="seq_Zamboanga_29945" spec="Sequence" taxon="Zamboanga_29945" totalcount="4" value="0202000000000202010000020000100000000?000010000000?0100000100000010000100001000?000001020?000221012002220020?001102110000001000000020?20200010000011001000000020000000100001010000001000100000?210100002100000021000000121000?000000102000000200202221002000120000010000210020010000000100000100000000000000100001000000000200001000001?10000000?2000000000000000020002000010000200012001210010010010000000010001000?00000000110002020000000000002100000010000000000200100220020202010100010200200000??000000100000020000000010200000020?00000000200000001100201000000211000001000?000100000?0000000200002000100000000001202100000?0000101002000000020?000001?0000000021001100000?0000000002000"/>
+    </data>
+
+    <map name="Uniform" >beast.base.inference.distribution.Uniform</map>
+
+    <map name="Exponential" >beast.base.inference.distribution.Exponential</map>
+
+    <map name="LogNormal" >beast.base.inference.distribution.LogNormalDistributionModel</map>
+
+    <map name="Normal" >beast.base.inference.distribution.Normal</map>
+
+    <map name="Beta" >beast.base.inference.distribution.Beta</map>
+
+    <map name="Gamma" >beast.base.inference.distribution.Gamma</map>
+
+    <map name="LaplaceDistribution" >beast.base.inference.distribution.LaplaceDistribution</map>
+
+    <map name="prior" >beast.base.inference.distribution.Prior</map>
+
+    <map name="InverseGamma" >beast.base.inference.distribution.InverseGamma</map>
+
+    <map name="OneOnX" >beast.base.inference.distribution.OneOnX</map>
+
+    <run id="mcmc" spec="MCMC" chainLength="5000000" storeEvery="1000">
+        <state id="state" spec="State" storeEvery="1000">
+            <stateNode id="Tree.rep1" spec="beast.base.evolution.tree.ClusterTree" clusterType="upgma" nodetype="snap.NodeData">
+                <taxa id="snap.rep1" spec="snap.Data" dataType="integerdata">
+                    <rawdata idref="rep1"/>
+                    <taxonset id="Mindanao" spec="TaxonSet">
+                        <taxon id="Mindanao_2253" spec="Taxon"/>
+                        <taxon id="Mindanao_1275" spec="Taxon"/>
+                        <taxon id="Mindanao_28416" spec="Taxon"/>
+                    </taxonset>
+                    <taxonset id="Luzon" spec="TaxonSet">
+                        <taxon id="Luzon_FMNH454949" spec="Taxon"/>
+                        <taxon id="Luzon_26984" spec="Taxon"/>
+                        <taxon id="Luzon_18070" spec="Taxon"/>
+                    </taxonset>
+                    <taxonset id="Zamboanga" spec="TaxonSet">
+                        <taxon id="Zamboanga_19178" spec="Taxon"/>
+                        <taxon id="Zamboanga_18159" spec="Taxon"/>
+                        <taxon id="Zamboanga_29945" spec="Taxon"/>
+                    </taxonset>
+                </taxa>
+                <parameter id="RealParameter.0" spec="parameter.RealParameter" lower="0.0" name="clock.rate" upper="0.0">1.0</parameter>
+            </stateNode>
+            <parameter id="u" spec="parameter.RealParameter" lower="0.0" name="stateNode">1.0</parameter>
+            <parameter id="v" spec="parameter.RealParameter" lower="0.0" name="stateNode">1.0</parameter>
+            <parameter id="lambda" spec="parameter.RealParameter" lower="0.0" name="stateNode">0.01</parameter>
+            <parameter id="coalescenceRate" spec="parameter.RealParameter" name="stateNode">10.0</parameter>
+        </state>
+        <distribution id="posterior" spec="CompoundDistribution">
+            <distribution id="prior" spec="CompoundDistribution">
+                <prior id="lambdaPrior.rep1" name="distribution" x="@lambda">
+                    <OneOnX id="OneOnX.2" name="distr"/>
+                </prior>
+                <distribution id="snapprior.rep1" spec="snap.likelihood.SnAPPrior" coalescenceRate="@coalescenceRate" lambda="@lambda" tree="@Tree.rep1">
+                    <parameter id="alpha" spec="parameter.RealParameter" estimate="false" lower="0.0" name="alpha">11.75</parameter>
+                    <parameter id="beta" spec="parameter.RealParameter" estimate="false" lower="0.0" name="beta">109.73</parameter>
+                    <parameter id="kappa" spec="parameter.RealParameter" estimate="false" lower="0.0" name="kappa">1.0</parameter>
+                </distribution>
+                <prior id="uPrior.rep1" name="distribution" x="@u">
+                    <OneOnX id="OneOnX.4" name="distr"/>
+                </prior>
+                <prior id="vPrior.rep1" name="distribution" x="@v">
+                    <OneOnX id="OneOnX.5" name="distr"/>
+                </prior>
+            </distribution>
+            <distribution id="likelihood" spec="CompoundDistribution">
+                <distribution id="treeLikelihood.rep1" spec="snap.likelihood.SnAPTreeLikelihood" data="@snap.rep1" non-polymorphic="false" pattern="coalescenceRate" tree="@Tree.rep1">
+                    <siteModel id="MutationSiteModel.rep1" spec="SiteModel">
+                        <parameter id="mutationRate" spec="parameter.RealParameter" estimate="false" name="mutationRate">1.0</parameter>
+                        <parameter id="shape" spec="parameter.RealParameter" estimate="false" name="shape">2.0</parameter>
+                        <parameter id="proportionInvariant" spec="parameter.RealParameter" estimate="false" name="proportionInvariant">0.0</parameter>
+                        <substModel id="MutationModel" spec="snap.likelihood.SnapSubstitutionModel" coalescenceRate="@coalescenceRate" mutationRateU="@u" mutationRateV="@v"/>
+                    </siteModel>
+                </distribution>
+            </distribution>
+        </distribution>
+        <operator id="NodeSwapper" spec="snap.operators.NodeSwapper" tree="@Tree.rep1" weight="0.5"/>
+        <operator id="NodeBudger" spec="snap.operators.NodeBudger" size="0.5" tree="@Tree.rep1" weight="0.5"/>
+        <operator id="TreeScaler" spec="snap.operators.ScaleOperator" scaleFactor="0.25" tree="@Tree.rep1" weight="0.5"/>
+        <operator id="GammaMover" spec="snap.operators.GammaMover" coalescenceRate="@coalescenceRate" scale="0.5" weight="8.0"/>
+        <operator id="RateMixer" spec="snap.operators.RateMixer" coalescenceRate="@coalescenceRate" scaleFactors="0.25" tree="@Tree.rep1" weight="1.0"/>
+        <operator id="MutationMover" spec="snap.operators.MutationMover" u="@u" v="@v" weight="1.0" window="0.1"/>
+        <operator id="lambdaScaler" spec="snap.operators.ScaleOperator" parameter="@lambda" scaleFactor="0.75" weight="1.0"/>
+        <logger id="tracelog" spec="Logger" fileName="rep1.log" logEvery="1000" model="@posterior">
+            <log idref="posterior"/>
+            <log idref="likelihood"/>
+            <log idref="prior"/>
+            <log idref="u"/>
+            <log idref="v"/>
+            <log id="ThetaLogger" spec="snap.ThetaLogger" coalescenceRate="@coalescenceRate"/>
+            <log id="TreeHeightLogger" spec="beast.base.evolution.tree.TreeHeightLogger" tree="@Tree.rep1"/>
+        </logger>
+        <logger id="screenlog" spec="Logger" logEvery="1000">
+            <log idref="posterior"/>
+            <log id="ESS.0" spec="util.ESS" arg="@posterior"/>
+            <log idref="likelihood"/>
+            <log idref="prior"/>
+        </logger>
+        <logger id="treelog" spec="Logger" fileName="rep1.trees" logEvery="1000" mode="tree">
+            <log id="TreeWithMetaDataLogger.rep1" spec="beast.base.evolution.TreeWithMetaDataLogger" tree="@Tree.rep1">
+                <metadata id="theta" spec="snap.RateToTheta" coalescenceRate="@coalescenceRate"/>
+            </log>
+        </logger>
+    </run>
+
+</beast>
+

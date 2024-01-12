@@ -1,0 +1,18 @@
+<itsabeastystatewerein version='2.0' sample='5000000'>
+<statenode id='Tree.rep4'>((0:0.007408642756106239,1:0.007408642756106357)3:0.001460275902530236,2:0.008868918658636486)4:0.0</statenode>
+<statenode id='u'>u[1 1] (0.0,Infinity): 48.55335638109542 </statenode>
+<statenode id='v'>v[1 1] (0.0,Infinity): 0.505202550223908 </statenode>
+<statenode id='lambda'>lambda[1 1] (0.0,Infinity): 92.52526414190073 </statenode>
+<statenode id='coalescenceRate'>coalescenceRate[5 1] (-Infinity,Infinity): 10.079113736544997 21.898787798803728 49.09556514419604 16.59059306387259 15.195585515002591 </statenode>
+</itsabeastystatewerein>
+<!--
+{"operators":[
+{"id":"NodeSwapper","p":"NaN","accept":52760,"reject":147574,"acceptFC":52632,"rejectFC":147274,"rejectIv":111552,"rejectOp":111552},
+{"id":"NodeBudger","p":0.9999998329894337,"accept":88302,"reject":111470,"acceptFC":88121,"rejectFC":111193,"rejectIv":0,"rejectOp":0},
+{"id":"TreeScaler","p":0.5057635828932863,"accept":37288,"reject":163251,"acceptFC":37233,"rejectFC":162806,"rejectIv":0,"rejectOp":0},
+{"id":"GammaMover","p":1.0627399720551827,"accept":770564,"reject":2427783,"acceptFC":767307,"rejectFC":2423790,"rejectIv":0,"rejectOp":0},
+{"id":"RateMixer","p":0.014140599828736404,"accept":1478,"reject":398267,"acceptFC":1431,"rejectFC":397419,"rejectIv":0,"rejectOp":0},
+{"id":"MutationMover","p":"NaN","accept":4199,"reject":395720,"acceptFC":4177,"rejectFC":394812,"rejectIv":179707,"rejectOp":179707},
+{"id":"lambdaScaler","p":0.16005529435289298,"accept":116048,"reject":285297,"acceptFC":115221,"rejectFC":285225,"rejectIv":0,"rejectOp":0}
+]}
+-->
