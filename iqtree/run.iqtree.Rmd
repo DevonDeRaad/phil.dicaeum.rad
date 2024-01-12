@@ -1,0 +1,89 @@
+---
+title: "iqtree"
+author: "Devon DeRaad"
+date: '2022-12-02'
+output: html_document
+---
+
+### using your filtered vcf file to generate a phylip with seuqnece data for all filtered loci (including invariant sites), for only the samples that passed all filtering protocols
+```{r}
+library(vcfR)
+#read in vcf with filtered, unlinked loci that we want to use for gene tree estimation
+vcfR<-read.vcfR("~/Desktop/phil.dicaeum/filtered.85.unlinked.vcf")
+#check out the metadata
+head(vcfR@fix)
+#we want to isolate the third column, which contains the name of each locus
+head(vcfR@fix[,1])
+#get a list of just locus names to use as whitelist for stacks
+whitelist<-sub(":.*", "", vcfR@fix[,1])
+#make sure each locus is unique
+length(unique(whitelist)) == length(whitelist)
+#make sure the locus names look right
+whitelist[1:5]
+
+#write out whitelist for stacks
+#write.table(whitelist, file = "~/Desktop/phil.dicaeum/2590.whitelist.txt", quote = F, row.names = F, col.names = F)
+
+#generate popmap including only the samples in this filtered vcf file, assigning each sample to a unique pop so that we keep all tips distinct
+#but phylip format limits names to 10 characters or less! So don't forget to make population names less than 10 characters
+#here I use this code to do that:
+colnames(vcfR@gt)[-1]
+gsub("D_hypoleucum_","hyp",colnames(vcfR@gt)[-1])
+
+#make popmap
+p<-gsub("D_hypoleucum_","hyp",colnames(vcfR@gt)[-1])
+p<-gsub("D_nigrilore_","ni",p)
+df<-data.frame(ind=colnames(vcfR@gt)[-1],pop=p)
+
+#write out popmap for stacks
+#write.table(df, file = "~/Desktop/phil.dicaeum/iqtree.popmap.txt", quote = F, row.names = F, col.names = F, sep = "\t")
+```
+
+#### copy both of those files you just wrote to you local disk into your project directory on the cluster
+
+### use this bash code to generate the input phylip file you need to use for treebuilding
+```{bash, eval=FALSE}
+#run this bash code in a terminal window in the directory where you want the output to be (should be fast enough that you don't need to submit a job), specifying the path to where you ran your optimized Stacks iteration to the -P flag
+#(whitelist includes the loci you want to keep and popmap includes the samples you want to keep based on filtering)
+#--phylip-var-all flag indicates to output the phylip including invariant sites (best for phylogenetic reconstruction)
+/home/d669d153/work/stacks-2.41/populations -P /home/d669d153/work/phil.dicaeum/stacks_n8 -O . -M iqtree.popmap.txt --whitelist 2590.whitelist.txt --phylip-var-all
+
+#annoyingly, Stacks adds a line at the end of the file that says something like '# Stacks v2.41;  Phylip interleaved; December 02, 2022'
+#this is not standard for a phylip file, and will cause an error if you try to use this file to build a tree. Luckily, you can use the following sed one-liner below to easily remove this trailing line and write the cleaned output to a new file
+sed '/^#/ d' populations.all.phylip > pops.phy
+```
+
+### now simply submit this job to determine the optimal model of sequence evolution and generate a concatenated maximum likelihood tree for your dataset using the optimized model and calculating bootstrap support for internal branches
+```{bash, eval=FALSE}
+#!/bin/sh
+#
+#SBATCH --job-name=iqtree               # Job Name
+#SBATCH --nodes=1             # 40 nodes
+#SBATCH --ntasks-per-node=15               # 40 CPU allocation per Task
+#SBATCH --partition=sixhour         # Name of the Slurm partition used
+#SBATCH --chdir=/home/d669d153/work/phil.dicaeum/iqtree  # Set working d$
+#SBATCH --mem-per-cpu=2gb            # memory requested
+#SBATCH --time=360
+
+#-s specifies the input sequence data
+#-m MFP specifies to perform model testing and use the best model of sequence evolution
+#-bb specifies performing 1000 ultrafast bootstraps to assess support
+#-nt AUTO allows the program to use the optimal number of threads (15 specified here)
+/home/d669d153/work/iqtree-2.2.0-Linux/bin/iqtree2 -s pops.phy -m MFP -bb 1000 -nt AUTO
+```
+
+#### this should only take a couple of hours to finish
+
+### visualize your tree using the figtree GUI
+```{r}
+#start by copying in the entire directory where you ran iqtree to your local machine, e.g.,
+#scp -r d669d153@hpc.crc.ku.edu:/home/d669d153/work/phil.dicaeum/iqtree /Users/devder/Desktop/phil.dicaeum/
+#open the tree in figtree
+#unrooted tree looks like this:
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/unrooted.iqtree.png")
+
+#After manually rooting on the outgroup, color coding internal branches based on bootstrap support values, adding key bootstrap values directly, and labeling clades
+knitr::include_graphics("/Users/devder/Desktop/phil.dicaeum/iqtree/iqtree.png")
+```
+
+
