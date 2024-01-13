@@ -41,4 +41,6 @@ Reconstructing the true evolutionary history of the Buzzing Flowerpecker (*Dicae
 * All input and output files associated with performing species tree reconstruction using [SNAPP](https://www.beast2.org/snapp/) can be found in the folder called [snapp](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/snapp).
 * A detailed walkthrough of the entire SNAPP protocol can also be viewed [here](https://devonderaad.github.io/phil.dicaeum.rad/astral/run.snapp.html).
 
-
+### ABBA/BABA tests using Dsuite
+* All input and output files associated with running [Dsuite](https://github.com/millanek/Dsuite) can be found in the folder called [dsuite](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/dsuite).
+* A detailed walkthrough of how I ran Dsuite with detailed code can also be viewed [here](https://devonderaad.github.io/phil.dicaeum.rad/astral/run.dsuite.html).
