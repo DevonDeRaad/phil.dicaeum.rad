@@ -33,3 +33,12 @@ Reconstructing the true evolutionary history of the Buzzing Flowerpecker (*Dicae
 ### Unrooted phylogenetic network reconstruction
 * A walkthrough of the process of creating the splitstree can be viewed at: [https://devonderaad.github.io/phil.dicaeum.rad/make.splitstree.html](https://devonderaad.github.io/phil.dicaeum.rad/make.splitstree.html).
 
+### Species tree reconstruction from gene trees
+* All input and output files associated with performing species tree reconstruction using [ASTRAL-III](https://github.com/smirarab/ASTRAL) can be found in the folder called [astral](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/astral).
+* A detailed walkthrough of the entire astral protocol can also be viewed [here](https://devonderaad.github.io/phil.dicaeum.rad/astral/run.astral.html).
+
+### Species tree reconstruction from SNP data
+* All input and output files associated with performing species tree reconstruction using [SNAPP](https://www.beast2.org/snapp/) can be found in the folder called [snapp](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/snapp).
+* A detailed walkthrough of the entire SNAPP protocol can also be viewed [here](https://devonderaad.github.io/phil.dicaeum.rad/astral/run.snapp.html).
+
+
