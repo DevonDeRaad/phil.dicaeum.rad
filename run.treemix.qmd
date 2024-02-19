@@ -1,0 +1,213 @@
+---
+title: "*Dicaeum* TreeMix analysis"
+format: html
+toc: true
+toc-title: Document Contents
+number-sections: true
+embed-resources: true
+---
+
+### Step 1: move ulinked SNP dataset (as vcf) to the cluster, along with a popmap (text file) assigning all samples to tips.
+
+popmap is a tab delimited text file with two columns, 'sample ID' and 'population'.
+
+### Step 2: On the KU HPCC, use this job script to convert vcf to treemix input, then run TreeMix, and progressively add migration edges.
+
+```{bash, eval=FALSE}
+#!/bin/sh
+#
+#SBATCH --job-name=treemix              # Job Name
+#SBATCH --nodes=1             # 40 nodes
+#SBATCH --ntasks-per-node=1               # 40 CPU allocation per Task
+#SBATCH --partition=sixhour            # Name of the Slurm partition used
+#SBATCH --chdir=/home/d669d153/work/phil.dicaeum/treemix     # Set working d$
+#SBATCH --mem-per-cpu=5gb           # memory requested
+#SBATCH --time=100
+
+#convert vcf into treemix file
+#/home/d669d153/work/stacks-2.41/populations --in_vcf filtered.85.unlinked.vcf -O . --treemix -M treemix.popmap.txt
+#remove stacks header
+#echo "$(tail -n +2 filtered.85.unlinked.p.treemix)" > filtered.85.unlinked.p.treemix
+#gzip file for input to treemix
+#gzip filtered.85.unlinked.p.treemix
+
+#run treemix with m0
+/panfs/pfs.local/work/bi/bin/treemix-1.13/src/treemix -i filtered.85.unlinked.p.treemix.gz -root nigrilore -o treem0
+
+#add 1 migration edge
+/panfs/pfs.local/work/bi/bin/treemix-1.13/src/treemix -i filtered.85.unlinked.p.treemix.gz -m 1 -g treem0.vertices.gz treem0.edges.gz -o treem1
+
+#add 2 migration edges
+/panfs/pfs.local/work/bi/bin/treemix-1.13/src/treemix -i filtered.85.unlinked.p.treemix.gz -m 1 -g treem1.vertices.gz treem1.edges.gz -o treem2
+
+#add 3 migration edges
+/panfs/pfs.local/work/bi/bin/treemix-1.13/src/treemix -i filtered.85.unlinked.p.treemix.gz -m 1 -g treem2.vertices.gz treem2.edges.gz -o treem3
+```
+
+### Step 3: copy the entire treemix outdirectory from the KU cluster to my local machine
+
+```{bash, eval=FALSE}
+scp -r d669d153@hpc.crc.ku.edu:/home/d669d153/work/phil.dicaeum/treemix /Users/devder/Desktop/phil.dicaeum/
+```
+
+### Step 4: move into the treemix output directory and plot trees
+
+```{r}
+#source plotting functions that are distributed with treemix
+source("~/Downloads/plotting_funcs.R")
+
+#0 edge
+plot_tree("~/Desktop/phil.dicaeum/treemix/treem0")
+
+#1 edge
+plot_tree("~/Desktop/phil.dicaeum/treemix/treem1", plus = 0.02, arrow=.1, ybar = 0, scale=F, lwd=1.5)
+
+#2 edges
+plot_tree("~/Desktop/phil.dicaeum/treemix/treem2")
+
+#3 edges
+plot_tree("~/Desktop/phil.dicaeum/treemix/treem3")
+```
+
+### Step 5: evaluate the optimal number of migration edges
+
+```{r}
+#plot to see how much variance is explained by each edge
+m=NULL
+for(i in 0:3){
+  m[i+1] <- get_f(paste0("~/Desktop/phil.dicaeum/treemix/treem",i))
+}
+
+#print variance explained by each tree with 0,1,2,3 mig edges
+m
+
+#plot
+plot(seq(0,3),m,pch="*",cex=2,col="blue", type="b",xlab="migration edge number", ylab="% explained variance")
+```
+
+### Repeat procedure after removing the admixed samples from Mt. Busa
+
+```{r}
+library(vcfR)
+library(SNPfiltR)
+#read in vcf
+v<-read.vcfR("~/Desktop/phil.dicaeum/filtered.85.unlinked.vcf")
+vcfR.trim<-v[,colnames(v@gt) != "D_hypoleucum_1956" & colnames(v@gt) != "D_hypoleucum_2208" & colnames(v@gt) != "D_hypoleucum_2067" & colnames(v@gt) != "D_hypoleucum_2229" & colnames(v@gt) != "D_hypoleucum_2253"]
+vcfR.trim
+vcfR.trim<-min_mac(vcfR.trim, min.mac = 1)
+#vcfR::write.vcf(vcfR.trim, file="~/Desktop/phil.dicaeum/unlinked.nomtbusa.vcf.gz")
+```
+
+### On the KU HPCC, use this job script to convert the downsampled vcf to treemix input, then run TreeMix, and progressively add migration edges.
+
+```{bash, eval=FALSE}
+#!/bin/sh
+#
+#SBATCH --job-name=treemix              # Job Name
+#SBATCH --nodes=1             # 40 nodes
+#SBATCH --ntasks-per-node=1               # 40 CPU allocation per Task
+#SBATCH --partition=sixhour            # Name of the Slurm partition used
+#SBATCH --chdir=/home/d669d153/work/phil.dicaeum/treemix.nomtbusa     # Set working d$
+#SBATCH --mem-per-cpu=5gb           # memory requested
+#SBATCH --time=100
+
+#convert vcf into treemix file
+/home/d669d153/work/stacks-2.41/populations --in_vcf unlinked.nomtbusa.vcf -O . --treemix -M treemix.popmap.txt
+#remove stacks header
+echo "$(tail -n +2 unlinked.nomtbusa.p.treemix)" > filtered.85.unlinked.p.treemix
+#gzip file for input to treemix
+gzip filtered.85.unlinked.p.treemix
+
+#run treemix with m0
+/panfs/pfs.local/work/bi/bin/treemix-1.13/src/treemix -i filtered.85.unlinked.p.treemix.gz -root nigrilore -o treem0
+
+#add 1 migration edge
+/panfs/pfs.local/work/bi/bin/treemix-1.13/src/treemix -i filtered.85.unlinked.p.treemix.gz -m 1 -g treem0.vertices.gz treem0.edges.gz -o treem1
+
+#add 2 migration edges
+/panfs/pfs.local/work/bi/bin/treemix-1.13/src/treemix -i filtered.85.unlinked.p.treemix.gz -m 1 -g treem1.vertices.gz treem1.edges.gz -o treem2
+
+#add 3 migration edges
+/panfs/pfs.local/work/bi/bin/treemix-1.13/src/treemix -i filtered.85.unlinked.p.treemix.gz -m 1 -g treem2.vertices.gz treem2.edges.gz -o treem3
+```
+
+### Move into the treemix output directory and plot trees
+
+```{r}
+#source plotting functions that are distributed with treemix
+#source("~/Downloads/plotting_funcs.R")
+
+#0 edge
+plot_tree("~/Desktop/phil.dicaeum/treemix.nomtbusa/treem0")
+
+#1 edge
+plot_tree("~/Desktop/phil.dicaeum/treemix.nomtbusa/treem1", plus = 0.02, arrow=.1, ybar = 0, scale=F, lwd=1.5)
+
+#2 edges
+plot_tree("~/Desktop/phil.dicaeum/treemix.nomtbusa/treem2")
+
+#3 edges
+plot_tree("~/Desktop/phil.dicaeum/treemix.nomtbusa/treem3")
+```
+
+### Evaluate the optimal number of migration edges
+
+```{r}
+#plot to see how much variance is explained by each edge
+m=NULL
+for(i in 0:3){
+  m[i+1] <- get_f(paste0("~/Desktop/phil.dicaeum/treemix.nomtbusa/treem",i))
+}
+
+#print variance explained by each tree with 0,1,2,3 mig edges
+m
+
+#plot
+plot(seq(0,3),m,pch="*",cex=2,col="blue", type="b",xlab="migration edge number", ylab="% explained variance")
+```
+
+### Bootstrap the optimal tree with all samples included
+
+```{bash, eval=FALSE}
+#
+#SBATCH \--job-name=treemix \# Job Name
+#SBATCH \--nodes=1 \# 40 nodes
+#SBATCH \--ntasks-per-node=1 \# 40 CPU allocation per Task
+#SBATCH \--partition=bi \# Name of the Slurm partition used
+#SBATCH \--chdir=/home/d669d153/work/phil.dicaeum/treemix/boots \# Set working d\$
+#SBATCH \--mem-per-cpu=1000 \# memory requested
+#SBATCH \--time=200
+
+#100 bootstraps over 100 SNP blocks with 1 migration edge
+for i in {1..100}; do
+/panfs/pfs.local/work/bi/bin/treemix-1.13/src/treemix -i /home/d669d153/work/phil.dicaeum/treemix/filtered.85.unlinked.p.treemix.gz -m 1 -g /home/d669d153/work/phil.dicaeum/treemix/treem1.vertices.gz /home/d669d153/work/phil.dicaeum/treemix/treem1.edges.gz -bootstrap -k 100 -o \$i.treemix
+done;
+
+# unzip the tree files
+for i in { ls \*treeout.gz }; do
+gzip -d \$i
+done;
+
+# in R:
+#summarize bootstraps into a single file called 'bootstraps.100.trees'
+module load R
+R \--no-save
+setwd("/home/d669d153/work/phil.dicaeum/treemix/boots/")
+
+x \<- list.files(pattern="\*treeout")
+for(a in 1:length(x)) {
+	if (a==1) {
+		output \<- scan(x\[a\], what="character")\[1\]
+	} else {
+		output \<- c(output, scan(x\[a\], what="character")\[1\])
+	}
+}
+write(output, file="bootstraps.100.trees", ncolumns=1)
+quit()
+
+# in bash
+# summarize bootstrap support info from the file '100.bootstraps.trees' as internal branch annotations on a summary tree called 'boots.summed.tre'
+/home/d669d153/work/DendroPy/applications/sumtrees/sumtrees.py \--output=boots.summed.tre \--min-clade-freq=0.05 bootstraps.100.trees
+```
+
+![bootstrap support on the concensus tree](images/Screenshot%202024-02-19%20at%201.23.40%20PM.png)
