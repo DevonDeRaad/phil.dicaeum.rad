@@ -1,0 +1,252 @@
+---
+title: "running preliminary pipemaster models to set up optimal priors"
+format:
+  html:
+    code-fold: show
+    code-tools: true
+toc: true
+toc-title: Document Contents
+number-sections: true
+embed-resources: true
+---
+
+### Load libraries
+```{r}
+#install.packages("caret")
+library(caret) # caret: used to perform the superevised machine-learning (SML)
+#install.packages("doMC")  
+library(doMC) # doMC: necessary to run the SML in parallel
+library(PipeMaster)
+```
+
+### Read in each model
+In a previous script we went through the arduous process of setting up the four null models we wish to simulate. Here, we simply read in the details of these four models from a text file
+```{r}
+#model 1
+m1<-dget("m1.txt")
+#model 2
+m2<-dget("m2.txt")
+#model 3
+m3<-dget("m3.txt")
+#model 4
+m4<-dget("m4.txt")
+
+#plot each model to verify that it is set up correctly
+PlotModel(model=m1, use.alpha = F, average.of.priors=F)
+PlotModel(model=m2, use.alpha = F, average.of.priors=F)
+PlotModel(model=m3, use.alpha = F, average.of.priors=F)
+PlotModel(model=m4, use.alpha = F, average.of.priors=F)
+```
+
+### Calculate empirical summary stats
+Now, all I need to do is calculate the empirical sumstats
+```{r, results='hide'}
+#read in 'popassign' dataframe which was created in the previous script
+pops<-read.csv("~/Desktop/PM_dicaeum/popassign.csv")
+
+#calculate summary stats for empirical data
+obs <- obs.sumstat.ngs(model = m1, path.to.fasta = "~/Desktop/PM_dicaeum/haplotype.fastas", pop.assign = pops)
+
+#save this output to file
+#write.table(obs,"~/Desktop/PM_dicaeum/observed.txt", quote=F,col.names=T, row.names=F)
+```
+
+### Simulate data
+```{r}
+#use sim.msABC.sumstat to sim genomic data for each model
+#The total number of simulations = nsim.blocks x block.size x ncores. You can play with these values to optimize.
+#A small block size will take less RAM but more time. A large block size may overload R's memory capacity.
+#PipeMaster will output a time estimate at the console to help you optimize. From my experience, a block.size of 1000 will be good for most cases. If you don't want to mess with this, just leave at 1000, it should work fine.
+
+#once each set of simulations below has been generated with sufficient sample size, the line can be commented out, because the simulations will not need to be redone/over-written.
+
+#sim model 'm1' on my laptop (12 cores, 18 Gb RAM). Total number of sims here = 1*1000*5 = 5K
+#sim.msABC.sumstat(m1, nsim.blocks = 1, use.alpha = F, output.name = "m1", append.sims = F, block.size = 1000, ncores = 5)
+
+#Now, sim model 'm2'
+#sim.msABC.sumstat(m2, nsim.blocks = 1, use.alpha = F, output.name = "m2", append.sims = F, block.size = 1000, ncores = 5)
+
+#And, sim model 'm3'
+#sim.msABC.sumstat(m3, nsim.blocks = 1, use.alpha = F, output.name = "m3", append.sims = F, block.size = 1000, ncores = 5)
+
+#Finally, sim model 'm4'
+#sim.msABC.sumstat(m4, nsim.blocks = 1, use.alpha = F, output.name = "m4", append.sims = F, block.size = 1000, ncores = 5)
+```
+
+### Parameter optimization
+After simulating a preliminary set of models (5K simulate relatively quickly on my laptop for each model), we are going to go through the approach outlined below which is going to assess whether the arbitrarily set priors on our models are creating scenarios that approximate our empirical data in a meaningful way. If our empirical data are completely outside of the parameter space encompassed by our models, then we can't trust the results of the model selection process. You should use the informative summary statistics visualized below to tweak the prior settings on the simulated models (specifically Ne, divergence time, and migration rate) to ensure a good fit between your data and the models you sim. DO NOT ignore mutation rate. Set it at a value that you trust and then optimize other parameters around that. For birds, the default pipemaster mutation rate is far too low, and will throw off your other parameter estimates, or cause the parameter space of simulated models to appear completely outside of empirical datasets.
+
+### read sims back into R and make sure each model was simulated correctly
+```{r}
+#read in m1
+m1.sim <- read.table("SIMS_m1.txt", header=T)
+#If the tree topology is ((1,2),3)), as we assume for model 1, then join2_3 will always be > join1_2
+table(m1.sim$join2_3-m1.sim$join1_2 > 0) #test for ((1,2),3)
+
+#read in m2
+m2.sim <- read.table("SIMS_m2.txt", header=T)
+#Verify the topology in every simulation. If the tree is (1,(2,3)), then the join of lineages 1-3 will be > join of lineages 2-3, and every row in the sumstats will return a positive value in the following logical test.
+table(m2.sim$join1_3-m2.sim$join2_3 > 0) #test for (1,(2,3))
+
+#read in m3
+m3.sim <- read.table("SIMS_m3.txt", header=T)
+#If the tree topology is now a polytomy, as we assume, then join2_3 will always == join1_2
+table(m3.sim$join2_3 == m3.sim$join1_3) #test for polytomy
+
+#read in m4
+m4.sim <- read.table("SIMS_m4.txt", header=T)
+#If the tree topology is now a polytomy, as we assume, then join2_3 will always == join1_2
+table(m4.sim$join2_3 == m4.sim$join1_3) #test for polytomy
+
+#We are going to use two easily interpretable summary statistics to determine whether the models we've set up actually comment meaningfully on our observed data (i.e., overlap in parameter space)
+#To do so, we will first compare Fst of the simulations to our observed value. If these values are way off, then we likely need to adjust the number of generations specified as the prior for divergence times to more closely match our emprical data
+hist(m1.sim$s_average_Fst)
+abline(v=obs[colnames(obs) == "s_average_Fst"], col="red")
+hist(m2.sim$s_average_Fst)
+abline(v=obs[colnames(obs) == "s_average_Fst"], col="red")
+hist(m3.sim$s_average_Fst)
+abline(v=obs[colnames(obs) == "s_average_Fst"], col="red")
+hist(m4.sim$s_average_Fst)
+abline(v=obs[colnames(obs) == "s_average_Fst"], col="red")
+
+#Next, we will examine Pi. If the simulated values of Pi are way off from our observed, we may need to adjust the priors for Ne of each population (Ne is inversely correlated with Pi). Alternatively, we may need to adjust the mutation rate (more mutational input will generate greater genetic diversity) of our simulations.
+hist(m1.sim$s_average_pi)
+abline(v=obs[colnames(obs) == "s_average_pi"], col="red")
+hist(m2.sim$s_average_pi)
+abline(v=obs[colnames(obs) == "s_average_pi"], col="red")
+hist(m3.sim$s_average_pi)
+abline(v=obs[colnames(obs) == "s_average_pi"], col="red")
+hist(m4.sim$s_average_pi)
+abline(v=obs[colnames(obs) == "s_average_pi"], col="red")
+
+
+#Finally, we will examine Pi. If the simulated values of Pi are way off from our observed, we may need to adjust the priors for Ne of each population (Ne is inversely correlated with Pi). Alternatively, we may need to adjust the mutation rate (more mutational input will generate greater genetic diversity) of our simulations.
+hist(m1.sim$s_average_segs)
+abline(v=obs[colnames(obs) == "s_average_segs"], col="red")
+hist(m2.sim$s_average_segs)
+abline(v=obs[colnames(obs) == "s_average_segs"], col="red")
+hist(m3.sim$s_average_segs)
+abline(v=obs[colnames(obs) == "s_average_segs"], col="red")
+hist(m4.sim$s_average_segs)
+abline(v=obs[colnames(obs) == "s_average_segs"], col="red")
+
+#If these values are way off, consider adjusting the prior distributions in your simulations, because simulations that don't encompass the parameter space of your observed data are essentially worthless for model selection purposes, and render this whole process a waste of time.
+```
+
+```{r}
+#Identify only shared estimated variables across all three sims plus observed
+x<-colnames(obs)[colnames(obs) %in% colnames(m1.sim) & colnames(obs) %in% colnames(m2.sim) & colnames(obs) %in% colnames(m3.sim) & colnames(obs) %in% colnames(m4.sim)]
+#isolate variables shared between the simulations and empirical for observed
+obs.dat<-obs[,colnames(obs) %in% x]
+#transpose
+obs.dat<-t(as.matrix(obs.dat))
+#repeat for each simulation
+m1.dat<-m1.sim[,colnames(m1.sim) %in% x]
+m2.dat<-m2.sim[,colnames(m2.sim) %in% x]
+m3.dat<-m3.sim[,colnames(m3.sim) %in% x]
+m4.dat<-m4.sim[,colnames(m4.sim) %in% x]
+#check that orders match
+table(colnames(obs.dat) == colnames(m1.dat))
+table(colnames(obs.dat) == colnames(m2.dat))
+table(colnames(obs.dat) == colnames(m3.dat))
+table(colnames(obs.dat) == colnames(m4.dat))
+
+#combine all sims into a single dataframe
+models <- rbind(m1.dat,m2.dat,m3.dat,m4.dat)
+
+#see whether the empirical data are well fit by the models
+index <- c(rep("m1", nrow(m1.dat)), rep("m2", nrow(m2.dat)), rep("m3", nrow(m3.dat)), rep("m4", nrow(m4.dat)))
+plotPCs(model = models, index = index, observed = obs.dat, subsample = 1)
+
+#t-test each individual variable to see whether the observed differs significantly from the overall parameter space of all simulations
+t.res<-c()
+for(i in 1:ncol(models)){
+t.res[i]<-t.test(x=models[,i], mu = obs.dat[i], alternative = "two.sided")[["statistic"]]
+}
+#make histogram displaying the resulting t-statistic for each variable
+t.res<-abs(t.res)
+hist(t.res, breaks=50)
+#record t-statistic value for each test in a dataframe for subsetting the simulated and observed variables (i.e., columns)
+mod.dist<-data.frame(vars=colnames(models)[order(t.res)],t.stat=sort(t.res))
+#record integer value corresponding to 1/4 of the data
+quart<-round(nrow(mod.dist)/4)+1
+#remove the worst fit quartile of the summary statistics for the simulated models
+models.sub<-models[,colnames(models) %in% mod.dist$vars[1:(nrow(mod.dist)-quart)]]
+#repeat for observed data
+obs.sub<-obs.dat[,colnames(models) %in% mod.dist$vars[1:(nrow(mod.dist)-quart)]]
+#check if that improved the overall model fit of the simulated data to the observed
+plotPCs(model = models.sub, index = index, observed = obs.sub, subsample = 1)
+#calculate pairwise correlations among all summary statistic variables
+tmp <- cor(models.sub)
+#remove lower triangle of pairwise matrix
+tmp[!lower.tri(tmp)] <- 0
+#remove any summary statistics correlated > .95 with another variable from the subset simulation dataframe called 'models.sub'
+models.sub<-models.sub[,!apply(tmp, 2, function(x) any(abs(x) > .95, na.rm = TRUE))]
+#subset the observed summary statistics to the same set of variables
+obs.sub<-obs.sub[names(obs.sub) %in% colnames(models.sub)]
+#check if that improved the model fit
+plotPCs(model = models.sub, index = index, observed = obs.sub, subsample = 1)
+#calculate posterior probability of each model using ABC
+prob <- postpr(target = obs.sub, sumstat = models.sub, index = index, method = "mnlogistic", tol=.01)
+#summarize
+x<-summary(prob)
+#print
+round(x[["mnlogistic"]]$Prob,2)
+
+#perform cross validation for model assignment accuracy given this set of retained variables
+CV <- cv4postpr(sumstat = models.sub, index = index, method = "rejection", tol=0.01, nval = 100)
+#calculate the accuracy of model assignment under ideal conditions (proportion of simulated models identified accurately in repeated leave-one-out experiments)
+table(names(CV[["estim"]]$tol0.01) == CV[["estim"]]$tol0.01)[2]/length(CV[["estim"]]$tol0.01)
+```
+
+### Evaluate model performance
+At this point, you can and should tweak the prior parameters that you used to build your models and try to create models that are as similar as possible to your observed data. If the parameters of your observed data are nowhere near those of your simulated models, you are fitting data to models that have no ability to comment on your data. Simultaneously, you should pay attention to cross validation and make sure that the cross-validation results are sufficiently high. If you cannot distinguish between your simulated models, then you are wasting your time trying to predict the origin of your empirical dataset.
+
+### A note on circularity
+If you follow the protocol outlined here, I don't think you should be using these models to subsequently estimate parameters. Once you tweak and optimize your priors to match your empirical data for a given parameter, it becomes circular to then use models simulated under those priors to estimate the optimal value of that parameter. This is because those priors which you arbitrarily manipulated are then directly determining the outcome of the parameter optimization. Meanwhile, for model selection, I would argue that tweaking and optimizing your parameters is not a circular exercise, and in fact should always be done in order to ensure that your empirical data is within the parameter space of the simulated models. This is not circular because the exact values of the priors are not determining which model should be selected (parameters like Ne, divergence time, mutation rate, and migration rate, should be held as constant as possible across models to ensure this), rather they are held constant across models, and are therefore only determining whether the parameter space encompassed by your simulated models contains your emprical data, which it must in order for the overall exercise of model selection to be informative.
+
+### Perform neural network based prediction to see what it says for this preliminary dataset
+```{r, results='hide'}
+# set up number of cores for SML
+registerDoMC(5)
+## combine simulations and index
+mods <- cbind(models.sub, index)
+## setup the outcome (name of the models, cathegories)
+outcomeName <- 'index'
+## set up predictors (summary statistics)
+predictorsNames <- names(mods)[names(mods) != outcomeName]
+#open df to hold results
+df<-data.frame(m1=numeric(),m2=numeric(),m3=numeric(),m4=numeric(),acc=numeric(),kap=numeric())
+#repeat the following procedure 100 times, each time subsampling 75% of the simulation dataset and using that to train the neural network
+for (i in 1:100){
+## randomly split the data into trainning and testing sets; 75% for training, 25% testing
+splitIndex <- createDataPartition(mods[,outcomeName], p = 0.75, list = FALSE, times = 1)
+train <- mods[ splitIndex,]
+test  <- mods[-splitIndex,]
+## bootstraps and other controls
+objControl <- trainControl(method='boot', number = 1, returnResamp='final',classProbs = TRUE)
+## train the algoritm
+nnetModel_select <- train(train[,predictorsNames], train[,outcomeName], method="nnet", maxit=5000,
+                          trControl=objControl, metric = "Accuracy", preProc = c("center", "scale"))
+            
+## predict model used to generate the 25% of data left out of the training set
+predictions <- predict(object=nnetModel_select, test[,predictorsNames], type='raw')
+## calculate accuracy in model classification
+accu <- postResample(pred=predictions, obs=as.factor(test[,outcomeName]))
+#see how many times the prediction was right using cross-validation
+table(predictions == test$index)
+## predict probabilities of each model for the observe data
+pred <- predict(object=nnetModel_select, t(as.data.frame(obs.sub)), type='prob')
+#add results to a dataframe to hold this iteration
+df[i,]<-t(c(pred,accu))
+}
+```
+
+### show neural-net model selection results
+```{r}
+#show the results of the 100 neural networks
+hist(df$m1)
+hist(df$m2)
+hist(df$m3)
+hist(df$m4)
+```
