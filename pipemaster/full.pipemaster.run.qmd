@@ -1,0 +1,229 @@
+---
+title: "run full pipemaster simulations"
+format:
+  html:
+    code-fold: show
+    code-tools: true
+toc: true
+toc-title: Document Contents
+number-sections: true
+embed-resources: true
+---
+
+### Load libraries
+```{r, results='hide'}
+#install.packages("caret")
+library(caret) # caret: used to perform the superevised machine-learning (SML)
+#install.packages("doMC")  
+library(doMC) # doMC: necessary to run the SML in parallel
+#install.packages("devtools")
+#devtools::install_github("pievos101/PopGenome")
+#devtools::install_github("gehara/PipeMaster")
+library(PipeMaster)
+#install.packages("https://github.com/YingZhou001/POPdemog/raw/master/POPdemog_1.0.3.tar.gz", repos=NULL)
+library(POPdemog)
+```
+
+### Read in each model
+In a previous script we went through the arduous process of setting up the four null models we wish to simulate. Here, we simply read in the details of these four models from a text file
+```{r}
+#model 1
+m1<-dget("~/Desktop/dicaeum_full_pm/m1.txt")
+#model 2
+m2<-dget("~/Desktop/dicaeum_full_pm/m2.txt")
+#model 3
+m3<-dget("~/Desktop/dicaeum_full_pm/m3.txt")
+#model 4
+m4<-dget("~/Desktop/dicaeum_full_pm/m4.txt")
+
+#plot each model to verify that it is set up correctly
+PlotModel(model=m1, use.alpha = F, average.of.priors=F)
+PlotModel(model=m2, use.alpha = F, average.of.priors=F)
+PlotModel(model=m3, use.alpha = F, average.of.priors=F)
+PlotModel(model=m4, use.alpha = F, average.of.priors=F)
+```
+
+### Calculate empirical summary stats
+Now, all I need to do is calculate the empirical sumstats
+```{r}
+#read in 'popassign' dataframe which was created in the previous script
+#pops<-read.csv("~/Desktop/PM_dicaeum/popassign.csv")
+#calculate summary stats for empirical data
+#obs <- obs.sumstat.ngs(model = m1, path.to.fasta = "~/Desktop/PM_dicaeum/haplotype.fastas", pop.assign = pops)
+#save this output to file
+#write.table(obs,"~/Desktop/PM_dicaeum/observed.txt", quote=F,col.names=T, row.names=F)
+
+#since the three preceding steps have already been completed in a previous script, I will simply read in the observed summary statistics here
+obs<-as.matrix(read.table("~/Desktop/dicaeum_full_pm/observed.txt", header=T))
+```
+
+### simulate each replicate
+```{r}
+#use sim.msABC.sumstat to sim genomic data for each model
+#The total number of simulations = nsim.blocks x block.size x ncores. You can play with these values to optimize.
+#A small block size will take less RAM but more time. A large block size may overload R's memory capacity.
+#PipeMaster will output a time estimate at the console to help you optimize. From my experience, a block.size of 1000 will be good for most cases. If you don't want to mess with this, just leave at 1000, it should work fine.
+
+#once each set of simulations below has been generated with sufficient sample size, the line can be commented out, because the simulations will not need to be redone/over-written.
+
+#we are going to do this in a loop, and generate 50K sims for each of these 4 models, 5 times in total
+for (i in 1:5){
+  #sim model 'm1' on desktop (10 cores, 32 Gb RAM). Total number of sims here = 1*5000*10 = 50K
+  sim.msABC.sumstat(m1, nsim.blocks = 1, use.alpha = F, path = "~/Desktop/dicaeum_full_pm/", output.name = paste0("rep",i,".m1"),
+                    append.sims = F, block.size = 5000, ncores = 10)
+  #Now, sim model 'm2'
+  sim.msABC.sumstat(m2, nsim.blocks = 1, use.alpha = F, path = "~/Desktop/dicaeum_full_pm/", output.name = paste0("rep",i,".m2"),
+                    append.sims = F, block.size = 5000, ncores = 10)
+  #And, sim model 'm3'
+  sim.msABC.sumstat(m3, nsim.blocks = 1, use.alpha = F, path = "~/Desktop/dicaeum_full_pm/", output.name = paste0("rep",i,".m3"),
+                    append.sims = F, block.size = 5000, ncores = 10)
+  #Finally, sim model 'm4'
+  sim.msABC.sumstat(m4, nsim.blocks = 1, use.alpha = F, path = "~/Desktop/dicaeum_full_pm/", output.name = paste0("rep",i,".m4"),
+                    append.sims = F, block.size = 5000, ncores = 10)
+}
+
+#once the above simulations have been successfully performed, they can be commented out, as we can simply read in the summary statistics with the following code and there's no need to re-perform the simulations.
+```
+
+### Do prediction for each replicate
+```{r}
+for(i in 1:5){
+#read in model1
+m1.sim <- read.table(paste0("~/Desktop/dicaeum_full_pm/SIMS_rep",i,".m1.txt"), header=T)
+#read in model2
+m2.sim <- read.table(paste0("~/Desktop/dicaeum_full_pm/SIMS_rep",i,".m2.txt"), header=T)
+#read in model3
+m3.sim <- read.table(paste0("~/Desktop/dicaeum_full_pm/SIMS_rep",i,".m3.txt"), header=T)
+#read in model4
+m4.sim <- read.table(paste0("~/Desktop/dicaeum_full_pm/SIMS_rep",i,".m4.txt"), header=T)
+
+#Identify only shared estimated variables across all three sims plus observed
+x<-colnames(obs)[colnames(obs) %in% colnames(m1.sim) & colnames(obs) %in% colnames(m2.sim) & colnames(obs) %in% colnames(m3.sim) & colnames(obs) %in% colnames(m4.sim)]
+#isolate variables shared between the simulations and empirical for observed
+obs.dat<-obs[,colnames(obs) %in% x]
+#transpose
+obs.dat<-t(as.matrix(obs.dat))
+#repeat for each simulation
+m1.dat<-m1.sim[,colnames(m1.sim) %in% x]
+m2.dat<-m2.sim[,colnames(m2.sim) %in% x]
+m3.dat<-m3.sim[,colnames(m3.sim) %in% x]
+m4.dat<-m4.sim[,colnames(m4.sim) %in% x]
+#combine all sims into a single dataframe
+models <- rbind(m1.dat,m2.dat,m3.dat,m4.dat)
+
+#t-test each individual variable to see whether the observed differs significantly from the overall parameter space of all simulations
+t.res<-c()
+for(j in 1:ncol(models)){
+t.res[j]<-t.test(x=models[,j], mu = obs.dat[j], alternative = "two.sided")[["statistic"]]
+}
+#record t-statistic value for each test in a dataframe for subsetting the simulated and observed variables (i.e., columns)
+mod.dist<-data.frame(vars=colnames(models)[order(t.res)],t.stat=sort(t.res))
+#record integer value corresponding to 1/4 of the data
+quart<-round(nrow(mod.dist)/4)+1
+#remove the worst fit quartile of the summary statistics for the simulated models
+models.sub<-models[,colnames(models) %in% mod.dist$vars[1:(nrow(mod.dist)-quart)]]
+#repeat for observed data
+obs.sub<-obs.dat[,colnames(models) %in% mod.dist$vars[1:(nrow(mod.dist)-quart)]]
+#calculate pairwise correlations among all summary statistic variables
+tmp <- cor(models.sub)
+#remove lower triangle of pairwise matrix
+tmp[!lower.tri(tmp)] <- 0
+#remove any summary statistics correlated > .95 with another variable from the subset simulation dataframe called 'models.sub'
+models.sub<-models.sub[,!apply(tmp, 2, function(x) any(abs(x) > .95, na.rm = TRUE))]
+#subset the observed summary statistics to the same set of variables
+obs.sub<-obs.sub[names(obs.sub) %in% colnames(models.sub)]
+
+#Perform neural network based model selection.
+# set up number of cores for SML
+registerDoMC(10)
+## combine simulations and index
+index<-c(rep("m1",nrow(m1.dat)),rep("m2",nrow(m2.dat)),rep("m3",nrow(m1.dat)),rep("m4",nrow(m4.dat)))
+mods <- cbind(models.sub, index)
+## setup the outcome (name of the models, cathegories)
+outcomeName <- 'index'
+## set up predictors (summary statistics)
+predictorsNames <- names(mods)[names(mods) != outcomeName]
+#open df to hold results
+df<-data.frame(m1=numeric(),m2=numeric(),m3=numeric(),m4=numeric(),acc=numeric(),kap=numeric())
+#repeat the following procedure 100 times, each time subsampling 75% of the simulation dataset and using that to train the neural network
+for (k in 1:100){
+## randomly split the data into trainning and testing sets; 75% for training, 25% testing
+splitIndex <- createDataPartition(mods[,outcomeName], p = 0.75, list = FALSE, times = 1)
+train <- mods[ splitIndex,]
+test  <- mods[-splitIndex,]
+## bootstraps and other controls
+objControl <- trainControl(method='boot', number = 1, returnResamp='final',classProbs = TRUE)
+## train the algoritm
+nnetModel_select <- train(train[,predictorsNames], train[,outcomeName], method="nnet", maxit=5000,
+                          trControl=objControl, metric = "Accuracy", preProc = c("center", "scale"))
+            
+## predict model used to generate the 25% of data left out of the training set
+predictions <- predict(object=nnetModel_select, test[,predictorsNames], type='raw')
+## calculate accuracy in model classification
+accu <- postResample(pred=predictions, obs=as.factor(test[,outcomeName]))
+#see how many times the prediction was right using cross-validation
+table(predictions == test$index)
+## predict probabilities of each model for the observe data
+pred <- predict(object=nnetModel_select, t(as.data.frame(obs.sub)), type='prob')
+#add results to a dataframe to hold this iteration
+df[k,]<-t(c(pred,accu))
+}
+#show the results of the 100 neural networks
+hist(df$m1)
+hist(df$m2)
+hist(df$m3)
+hist(df$m4)
+
+#write to disk the results of the 100 neural networks for the given replicate (i)
+write.csv(df, paste0("~/Desktop/dicaeum_full_pm/rep",i,".neuralnet.model.selection.csv"), row.names=FALSE,quote=F)
+}
+```
+
+### Read in the results and plot them
+```{r}
+#read in results
+rep1.results<-read.csv("~/Desktop/dicaeum_full_pm/rep1.neuralnet.model.selection.csv")
+results<-rbind(rep1.results,read.csv("~/Desktop/dicaeum_full_pm/rep2.neuralnet.model.selection.csv"))
+results<-rbind(results,read.csv("~/Desktop/dicaeum_full_pm/rep3.neuralnet.model.selection.csv"))
+results<-rbind(results,read.csv("~/Desktop/dicaeum_full_pm/rep4.neuralnet.model.selection.csv"))
+results<-rbind(results,read.csv("~/Desktop/dicaeum_full_pm/rep5.neuralnet.model.selection.csv"))
+results$rep<-c(rep(1, times=100),rep(2, times=100),rep(3, times=100),rep(4, times=100),rep(5, times=100))
+
+#plot overall support for each model in all neural nets in all replicates
+hist(results$m1)
+hist(results$m2)
+hist(results$m3)
+hist(results$m4)
+
+par(mfrow=(c(3,2)))
+#plot support for each model separately for each replicate set of sims to see whether they came up with similar answers
+for (i in 1:4){
+hist(results[,i][c(results$rep == "1")], main=paste0("model ",i," - rep 1"))
+hist(results[,i][results$rep == "2"], main="rep 2")
+hist(results[,i][results$rep == "3"], main="rep 3")
+hist(results[,i][results$rep == "4"], main="rep 4")
+hist(results[,i][results$rep == "5"], main="rep 5")
+#visualize prediction accuracy in last box
+hist(results$acc)
+}
+
+#calculate mean model support and accuracy across all iterations
+mean.support<-data.frame(info=c("m1","m2","m3","m4","accuracy"), mean.support=c(mean(results$m1), mean(results$m2), mean(results$m3), mean(results$m4), mean(results$acc)))
+
+#calculate discrete model selection outcome for each replicate
+results$selected.model<-"NA"
+for(i in 1:nrow(results)){
+results$selected.model[i]<-colnames(results)[1:4][results[i,c(1:4)] == max(results[i,c(1:4)])]
+}
+#summarize results
+table(results$selected.model)
+table(results$selected.model)/nrow(results)
+#add to mean.support dataframe
+mean.support$selection.frequency<-c(table(results$selected.model)/nrow(results),NA)
+#print
+mean.support
+
+#write to disk
+write.csv(mean.support, "~/Desktop/dicaeum_full_pm/mean.support.across.all.runs.csv", row.names=F, quote=F)
+```
+
