@@ -1,5 +1,6 @@
-# Data and code for the manuscript:
-Reconstructing the true evolutionary history of the Buzzing Flowerpecker (*Dicaeum hypoleucum*) despite extensive incomplete lineage sorting and ongoing gene flow
+# The following repository holds all data and code for the manuscript:
+Reconstructing the true evolutionary history of the Buzzing Flowerpecker (*Dicaeum hypoleucum*) despite extensive incomplete lineage sorting and ongoing gene flow.
+- Lead author: Devon DeRaad (devonderaad@gmail.com)
 
 ### Data availability
 * SNP datasets and sampling sheets can be found in the folder named [data](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/data).
@@ -44,3 +45,14 @@ Reconstructing the true evolutionary history of the Buzzing Flowerpecker (*Dicae
 ### ABBA/BABA tests using Dsuite
 * All input and output files associated with running [Dsuite](https://github.com/millanek/Dsuite) can be found in the folder called [dsuite](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/dsuite).
 * A detailed walkthrough of how I ran Dsuite with detailed code can also be viewed [here](https://devonderaad.github.io/phil.dicaeum.rad/astral/run.dsuite.html).
+
+### TreeMix analysis
+* All input and output files associated with running [TreeMix](https://speciationgenomics.github.io/Treemix) can be found in the folder called [treemix](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/treemix).
+* A detailed walkthrough of the pipeline I used for running TreeMix, complete with visualizations of all output files, can be viewed [here](https://devonderaad.github.io/phil.dicaeum.rad/run.treemix.html).
+
+### PhyloNet
+* All input and output files for running [PhyloNet](https://phylogenomics.rice.edu/html/phylonet.html) can be found in the folder called [phylonet](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/phylonet).
+* A detailed walkthrough of the approach can be viewed [here](https://devonderaad.github.io/phil.dicaeum.rad/phylonet/run.phylonet.html).
+
+### Demographic modeling with PipeMaster
+* A comprehensive explanation of our custom pipeline for performing demographic modeling using the program [PipeMaster](https://github.com/gehara/PipeMaster) is available in the subdirectory called [pipemaster](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/pipemaster) which contains its own detailed 'readme' page.
