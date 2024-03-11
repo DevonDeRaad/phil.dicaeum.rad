@@ -1,0 +1,404 @@
+---
+title: "Set up four demographic models for Dicaeum"
+format:
+  html:
+    code-fold: show
+    code-tools: true
+toc: true
+toc-title: Document Contents
+number-sections: true
+embed-resources: true
+---
+
+### Installation details and load library
+```{r, message=FALSE}
+#install devtools
+#install.packages("devtools")
+#manually install package 'PopGenome' because it's been removed from CRAN
+#devtools::install_github("pievos101/PopGenome")
+## install  POPdemog to be able to plot your models                
+#install.packages("https://github.com/YingZhou001/POPdemog/raw/master/POPdemog_1.0.3.tar.gz",repos=NULL)
+#install PipeMaster
+#devtools::install_github("gehara/PipeMaster")
+#load PipeMaster package if install worked 
+library(PipeMaster)
+library(vcfR)
+library(SNPfiltR)
+```
+
+### set up a fresh directory to store the results from this script
+```{r}
+#create a new directory to save outputs from the rest of this script
+#dir.create("~/Desktop/PM_dicaeum") #this line can be commented once it is run the first time, and the directory is created
+#set this new folder as your working directory
+setwd("~/Desktop/PM_dicaeum")
+```
+
+### setup models
+```{r, eval=FALSE}
+#This chunk is set to 'eval=FALSE' because it requires using the interactive function main.menu() to set up the model, which is best done manually directly in the console, rather than during knitting a Qmd.
+##running 'm1 <- main.menu()' sets up a model called 'm1'. Do this in the console pane, not directly in the Qmd doc, because it opens an interactive response window that you need to engage with via typing in the console.
+##IF you mess up at any time you can hit ctrl-C to exit, and then type 'm1 <- main.menu(m1)', which will take you back to the 'Model Builder' menu for your model. Note that if you error out of the interactive session, your changes will not be saved! The object you created through main.menu() is only updated/saved when you end your interactive Model Builder session by typing 'Q'.
+
+#type 'm1 <- main.menu()'. This will be a 3 species model matching the ASTRAL tree, with non-sister gene flow between Luzon and Mindanao
+#then, type '((1,2)3)' to set up a three population bifurcating model (matching this exact newick string is crucial), where:
+#pop 3: Luzon
+#pop 2: Mindanao
+#pop 1: Zamboanga
+#and the tree follows the ASTRAL results
+#then, type 'I' to enter the 'Gene setup' portion
+#type 'genomic', hit enter, then type '2188' to simulate 2188 loci.
+#Set mutation rate to a default avian prior (4.6x10e-09) then type 'B' to go back to the main 'Model Builder' menu.
+
+#then, type 'P' to visualize the model you've created and make sure it looks right.
+
+#then, type 'F' to set up migration priors and type 'YES' to set up migration between all pops.
+
+#then, type 'D', and then 'YES' and set up a change in migration between pops 2&3. Then type 'B' to go back to the main menu.
+
+#now type 'H' to set up conditions, and type 'Y' to generate the condition matrices. Then type 'B' to go back to the main menu, and 'Q' to quit and save this model.
+
+#we now have a model named 'm1' that we can manipulate as a typical R object to finish setting up our model.
+m1 #see details
+#manipulate lower range of Ne prior for each pop so that the prior ranges from 10K-500K
+m1$flags$n[c(1:3),4]<- "1e+04"
+#remove all migration edges except between lineages 2&3
+m1$flags$m<-m1$flags$m[c(4,6),]
+#update the # of individuals migrating per gen to 0.1 - 2
+m1$flags$m[c(1,2),5]<-"2"
+#make migration shift timing minimum prior = 500K
+m1$flags$em$time[c(1,2),4]<-"5e+05"
+#make migration shift timing maximum prior = 2M
+m1$flags$em$time[c(1,2),5]<-"2e+06"
+#leave coalescent times minimum priors = 500K
+#make coalescent times maximum prior = 2M
+m1$flags$ej[c(1,2),5]<-"2e+06"
+#remove those extraneous migration edges we deleted above from the conditional migration matrix
+m1$conds$mig.matrix<-m1$conds$mig.matrix[c(4,7),c(4,7)]
+#make sure the timing of join2_3 is always > the timing of join1_2 (i.e., enforce the topology)
+m1$conds$time.matrix[2,1]<-">"
+m1$conds$time.matrix[1,2]<-"<"
+#enforce the shift in migration rate at the same time as the join between pops 1 and 2 happens:
+m1$conds$time.matrix[1,c(3,4)]<-"="
+m1$conds$time.matrix[c(3,4),1]<-"="
+
+#check model
+m1
+
+#it can be quite tedious to get these models set up exactly correctly, but the code and instructions above are aimed to give you a start. At the end of the day, the four models that I set up for this paper (after a ton of tweaking) look like this:
+#read models in if needed
+m1<-dget("m1.txt")
+m2<-dget("m2.txt")
+m3<-dget("m3.txt")
+m4<-dget("m4.txt")
+
+#Model 1: ((1,2),3) with non-sister gene flow
+$flags
+$flags$n
+     [,1]       [,2] [,3] [,4]      [,5]    [,6]   
+[1,] "Ne0.pop1" "-n" "1"  "2.5e+05" "5e+05" "runif"
+[2,] "Ne0.pop2" "-n" "2"  "2.5e+05" "5e+05" "runif"
+[3,] "Ne0.pop3" "-n" "3"  "2.5e+05" "5e+05" "runif"
+
+$flags$m
+     [,1]       [,2] [,3]  [,4]  [,5] [,6]   
+[1,] "mig0.2_3" "-m" "2 3" "0.1" "2"  "runif"
+[2,] "mig0.3_2" "-m" "3 2" "0.1" "2"  "runif"
+
+$flags$em
+$flags$em$size
+     [,1]       [,2]  [,3]  [,4] [,5] [,6]   
+[1,] "mig1.2_3" "-em" "2 3" "0"  "0"  "runif"
+[2,] "mig1.3_2" "-em" "3 2" "0"  "0"  "runif"
+
+$flags$em$time
+     [,1]         [,2]  [,3]  [,4]    [,5]    [,6]   
+[1,] "t.mig1.2_3" "-em" "2 3" "1e+05" "5e+05" "runif"
+[2,] "t.mig1.3_2" "-em" "3 2" "1e+05" "5e+05" "runif"
+
+
+$flags$ej
+     [,1]      [,2]  [,3]  [,4]    [,5]    [,6]   
+[1,] "join1_2" "-ej" "1 2" "1e+05" "5e+05" "runif"
+[2,] "join2_3" "-ej" "2 3" "5e+05" "1e+06" "runif"
+
+
+$conds
+$conds$size.matrix
+         Ne0.pop1 Ne0.pop2 Ne0.pop3
+Ne0.pop1        0       NA       NA
+Ne0.pop2       NA        0       NA
+Ne0.pop3       NA       NA        0
+
+$conds$mig.matrix
+         mig0.2_3 mig0.3_2
+mig0.2_3       NA       NA
+mig0.3_2       NA       NA
+
+$conds$time.matrix
+           join1_2 join2_3 t.mig1.2_3 t.mig1.3_2
+join1_2    "0"     "<"     "="        "="       
+join2_3    ">"     "0"     ">"        ">"       
+t.mig1.2_3 "="     "<"     "0"        NA        
+t.mig1.3_2 "="     "<"     NA         "0"       
+
+
+$tree
+[1] "((1,2),3)"
+
+attr(,"class")
+[1] "Model"
+
+#Model 2: (1,(2,3)) with non-sister gene flow
+$flags
+$flags$n
+     [,1]       [,2] [,3] [,4]      [,5]    [,6]   
+[1,] "Ne0.pop1" "-n" "1"  "2.5e+05" "5e+05" "runif"
+[2,] "Ne0.pop2" "-n" "2"  "2.5e+05" "5e+05" "runif"
+[3,] "Ne0.pop3" "-n" "3"  "2.5e+05" "5e+05" "runif"
+
+$flags$m
+     [,1]       [,2] [,3]  [,4]  [,5] [,6]   
+[1,] "mig0.1_2" "-m" "1 2" "0.1" "2"  "runif"
+[2,] "mig0.2_1" "-m" "2 1" "0.1" "2"  "runif"
+
+$flags$ej
+     [,1]      [,2]  [,3]  [,4]    [,5]    [,6]   
+[1,] "join2_3" "-ej" "2 3" "1e+05" "5e+05" "runif"
+[2,] "join1_3" "-ej" "1 3" "5e+05" "1e+06" "runif"
+
+
+$conds
+$conds$size.matrix
+         Ne0.pop1 Ne0.pop2 Ne0.pop3
+Ne0.pop1        0       NA       NA
+Ne0.pop2       NA        0       NA
+Ne0.pop3       NA       NA        0
+
+$conds$mig.matrix
+         mig0.1_2 mig0.2_1
+mig0.1_2       NA       NA
+mig0.2_1       NA       NA
+
+$conds$time.matrix
+        join2_3 join1_3
+join2_3 "0"     "<"    
+join1_3 ">"     "0"    
+
+
+$tree
+[1] "(1,(2,3))"
+
+attr(,"class")
+[1] "Model"
+
+#Model 3: Trifurcation
+$flags
+$flags$n
+     [,1]       [,2] [,3] [,4]      [,5]    [,6]   
+[1,] "Ne0.pop1" "-n" "1"  "2.5e+05" "5e+05" "runif"
+[2,] "Ne0.pop2" "-n" "2"  "2.5e+05" "5e+05" "runif"
+[3,] "Ne0.pop3" "-n" "3"  "2.5e+05" "5e+05" "runif"
+
+$flags$ej
+     [,1]      [,2]  [,3]  [,4]    [,5]    [,6]   
+[1,] "join2_3" "-ej" "2 3" "1e+05" "1e+06" "runif"
+[2,] "join1_3" "-ej" "1 3" "1e+05" "1e+06" "runif"
+
+
+$conds
+$conds$size.matrix
+         Ne0.pop1 Ne0.pop2 Ne0.pop3
+Ne0.pop1        0       NA       NA
+Ne0.pop2       NA        0       NA
+Ne0.pop3       NA       NA        0
+
+$conds$time.matrix
+        join2_3 join1_3
+join2_3 "0"     "="    
+join1_3 "="     "0"    
+
+
+$tree
+[1] "(1,(2,3))"
+
+attr(,"class")
+[1] "Model"
+
+#Model 4: Trifurcation with gene flow
+$flags
+$flags$n
+     [,1]       [,2] [,3] [,4]      [,5]    [,6]   
+[1,] "Ne0.pop1" "-n" "1"  "2.5e+05" "5e+05" "runif"
+[2,] "Ne0.pop2" "-n" "2"  "2.5e+05" "5e+05" "runif"
+[3,] "Ne0.pop3" "-n" "3"  "2.5e+05" "5e+05" "runif"
+
+$flags$m
+     [,1]       [,2] [,3]  [,4]  [,5] [,6]   
+[1,] "mig0.1_2" "-m" "1 2" "0.1" "2"  "runif"
+[2,] "mig0.2_1" "-m" "2 1" "0.1" "2"  "runif"
+[3,] "mig0.2_3" "-m" "2 3" "0.1" "2"  "runif"
+[4,] "mig0.3_2" "-m" "3 2" "0.1" "2"  "runif"
+
+$flags$ej
+     [,1]      [,2]  [,3]  [,4]    [,5]    [,6]   
+[1,] "join2_3" "-ej" "2 3" "1e+05" "1e+06" "runif"
+[2,] "join1_3" "-ej" "1 3" "1e+05" "1e+06" "runif"
+
+
+$conds
+$conds$size.matrix
+         Ne0.pop1 Ne0.pop2 Ne0.pop3
+Ne0.pop1        0       NA       NA
+Ne0.pop2       NA        0       NA
+Ne0.pop3       NA       NA        0
+
+$conds$mig.matrix
+         mig0.1_2 mig0.2_1 mig0.2_3 mig0.3_2
+mig0.1_2       NA       NA       NA       NA
+mig0.2_1       NA       NA       NA       NA
+mig0.2_3       NA       NA       NA       NA
+mig0.3_2       NA       NA       NA       NA
+
+$conds$time.matrix
+        join2_3 join1_3
+join2_3 "0"     "="    
+join1_3 "="     "0"    
+
+
+$tree
+[1] "(1,(2,3))"
+
+attr(,"class")
+[1] "Model"
+```
+
+### prune outgroups from sampling and create Stacks input files needed to generate the 58 sample 2188 locus ingroup alignment needed for PipeMaster input
+```{r}
+#read in vcf containing samples and SNPs
+vcf<-vcfR::read.vcfR("~/Downloads/filtered.85.unlinked.vcf.gz")
+vcf
+#remove outgroup samples from the vcf
+vcf<-vcf[,colnames(vcf@gt) != "D_nigrilore_KU28413" & colnames(vcf@gt) != "D_nigrilore_KU28414"]
+#remove sites that are now invariant
+vcf<-SNPfiltR::min_mac(vcf,1)
+vcf
+#make popmap for Stacks
+p<-gsub("D_hypoleucum_","hyp",colnames(vcf@gt)[-1])
+df<-data.frame(ind=colnames(vcf@gt)[-1],pop=p)
+#write out popmap for stacks
+#write.table(df, file = "~/Desktop/PM_dicaeum/PM.popmap.txt", quote = F, row.names = F, col.names = F, sep = "\t")
+#get a list of just locus names to use as whitelist for stacks
+whitelist<-sub(":.*", "", vcf@fix[,1])
+#make sure each locus is unique
+length(unique(whitelist)) == length(whitelist)
+#write out whitelist for stacks
+#write.table(whitelist, file = "~/Desktop/PM_dicaeum/2188.whitelist.txt", quote = F, row.names = F, col.names = F)
+```
+copy both of those files you just wrote to you local disk into your project directory on the cluster
+
+### Run this bash code on the cluster in a fresh directory where you want output stored, to generate a single fasta alignment for all 2188 loci and all 58 individuals, using Stacks
+
+Important note: You should use the '--fasta-samples' option to ensure that both haplotypes are written out for each sample. This is what the PipeMaster input function is expecting! If you use a consensus fasta for each sample with IUPAC codes, summary statistics will be (silently) calculated incorrectly for your empirical dataset! This is a big deal and this step has to be done right if we want to be able to trust the results at all.
+
+```{bash, eval=FALSE}
+#run this bash code in a terminal window in the directory where you want the output to be (should be fast enough that you don't need to submit a job), specifying the path to where you ran your optimized Stacks iteration to the -P flag
+#(whitelist includes the loci you want to keep and popmap includes the samples you want to keep based on filtering)
+#--phylip-var-all flag indicates to output the phylip including invariant sites (best for phylogenetic reconstruction)
+/home/d669d153/work/stacks-2.41/populations -P /home/d669d153/work/phil.dicaeum/stacks_n8 -O . -M PM.popmap.txt --whitelist 2188.whitelist.txt --fasta-samples
+
+#annoyingly, Stacks adds a line at the end of the file that says something like '# Stacks v2.41;  Phylip interleaved; December 02, 2022'
+#this is not standard for a phylip file, and will cause an error if you try to use this file to build a tree. Luckily, you can use the following sed one-liner below to easily remove this trailing line and write the cleaned output to a new file
+sed '/^#/ d' populations.samples.fa > pops.fa
+```
+
+### read in combined fasta and cut it up into a single fasta alignment for each locus
+```{r, eval=FALSE}
+#read in the fasta file generated in stacks
+dna<-read.dna(file = "~/Desktop/PM_dicaeum/populations.samples.fa", format="fasta")
+#isolate locus names
+list.names<-names(as.character(dna))
+#isolate the informative part that identifies the locus
+locus.list<-gsub("CLocus","Locus",stringr::str_extract(list.names, "[^_]*_[^_]*"))
+#isolate the informative part that identifies the sample
+sample.list<-gsub("]","",sub(".*([A-Za-z]+_[A-Za-z])", "\\1", list.names))
+#get a list of all unique loci in the order they appear in the fasta file
+unique.loci<-unique(locus.list)
+#split the dataframe into an individual object for each locus
+for (i in 1:length(unique(locus.list))){
+  #isolate each sequence associated with the given locus
+  locusi<-dna[locus.list == unique(locus.list)[i]]
+  #assign informative sample names to each sequence for this given locus
+  names(locusi)<-sample.list[locus.list == unique(locus.list)[i]]
+  #write that sample to file
+  #you will need to change this path to make it point to an empty directory where you want these fastas dumped
+  #write.FASTA(x = locusi, file=paste0("~/Desktop/PM_dicaeum/haplotype.fastas/locus.",i,".fasta"))
+  print(i)
+}
+
+#make sure those files were created in the directory we want them in
+list.files(path = "~/Desktop/PM_dicaeum/haplotype.fastas")[1:5] #print first 5 files in this directory
+```
+
+### match empirical parameters to the models to be simulated
+```{r, eval=FALSE}
+#matching the empirical parameters in the simulated models is done by the function 'get.data.structure()', which takes as input four arguments: model, path.to.fasta, pop.assign, sanger
+#'model' just needs the R object describing the model (set up above) passed to it
+#'path.to.fasta' needs the path (relative or complete) to a directory full of fastas, which are our empirical input data
+#'pop.assign' takes a data.frame object with two columns 'sample' and 'pop'
+#'sanger' is looking for a logical statement telling the function whether this is sanger data
+
+#load in sampling info to make object 'popassign'
+samp<-read.csv("~/Downloads/dicaeum.retained.sampling.csv")
+#remove outgroup samples
+samp<-samp[c(1:54,57:60),]
+#rename extra long sample name
+samp[13,1]<-"m_FMNH454949"
+#make sure individual names in dataframe match the fastas
+samp$ID %in% unique(sample.list)
+#create popassign object
+popassign<-data.frame(sample=samp$ID, pop=samp$Taxa)
+#assign lineages to numbers based on the model
+popassign$pop[popassign$pop == "Luzon"]<-3
+popassign$pop[popassign$pop == "Mindanao"]<-2
+popassign$pop[popassign$pop == "Zamboanga"]<-1
+#convert those numbers to class 'integer'
+popassign$pop<-as.integer(popassign$pop)
+#make sure that worked
+head(popassign)
+#write to disk
+#write.csv(popassign, "~/Desktop/PM_dicaeum/popassign.csv", row.names=F, quote=F)
+
+#replicate the data structure for model 1
+m1 <- get.data.structure(model = m1, path.to.fasta = "/Users/devonderaad/Desktop/PM_dicaeum/haplotype.fastas", pop.assign = popassign, sanger = F)
+
+#repeat for model 2
+m2 <- get.data.structure(model = m2, path.to.fasta = "/Users/devonderaad/Desktop/PM_dicaeum/haplotype.fastas", pop.assign = popassign, sanger = F)
+
+#repeat for model 3
+m3 <- get.data.structure(model = m3, path.to.fasta = "/Users/devonderaad/Desktop/PM_dicaeum/haplotype.fastas", pop.assign = popassign, sanger = F)
+
+#print model m1 and verify that it has been set up correctly to match empirical details
+m1
+#plot the model to make sure it's set up correctly
+PlotModel(model=m1, use.alpha = F, average.of.priors=F)
+#save model m1-m4
+#dput(m1, "/Users/devonderaad/Desktop/PM_dicaeum/m1.txt")
+#dput(m2, "/Users/devonderaad/Desktop/PM_dicaeum/m2.txt")
+#dput(m3, "/Users/devonderaad/Desktop/PM_dicaeum/m3.txt")
+#dput(m4, "/Users/devonderaad/Desktop/PM_dicaeum/m4.txt")
+```
+
+### Calculate empirical summary stats on our dataset and write to disk
+```{r}
+m1<-dget("m1.txt")
+popassign<-read.csv("~/Desktop/PM_dicaeum/popassign.csv")
+#calculate summary stats for empirical data
+obs <- obs.sumstat.ngs(model = m1, path.to.fasta = "~/Desktop/PM_dicaeum/haplotype.fastas", pop.assign = popassign)
+
+#save this output to file
+print(obs)
+#write.table(obs,"~/Desktop/PM_dicaeum/observed.txt", quote=F,col.names=T, row.names=F)
+```
+
+We are now ready to start in the next script, where we will generate a preliminary set of simulations from these four models, and tweak the parameters (specifically the prior distributions) set in these models in order to match them to the empirical data.
