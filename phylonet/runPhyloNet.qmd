@@ -90,7 +90,7 @@ java -jar /home/d669d153/work/PhyloNet_3.8.0.jar mpl.1retic.nex
 
 ```{r}
 library(tanggle)
-z <- read.evonet(text = "((((mindanao:1.0)#H1:1.0::0.6988928356813031,zamboanga:1.0):0.2178572393785994,luzon:1.0):0.06037663236868505,#H1:1.0::0.3011071643186969);")
+z <- read.evonet(text = "((((mindanao:1.0)#H1:1.0::0.494,zamboanga:1.0):0.3244889262249451,luzon:1.0):0.035718031146395546,#H1:1.0::0.506);")
 #Plot an explicit network:
 ggevonet(z, layout = "rectangular") + geom_tiplab() + geom_nodelab()
 ggevonet(z, layout = "slanted") + geom_tiplab() + geom_nodelab()
