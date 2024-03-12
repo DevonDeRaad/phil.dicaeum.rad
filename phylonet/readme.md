@@ -1,0 +1,1 @@
+The file 'mpl.nooutgroup.1retic.nex' is the input used for PhyloNet. The file 'run.inferMPL.sh' is the bash file used to execute the script. The file 'output.txt' is the resulting output from PhyloNet. The entire PhyloNet pipeline that we used can be viewed [here](https://devonderaad.github.io/phil.dicaeum.rad/phylonet/runPhyloNet.html).
