@@ -26,7 +26,7 @@ Reconstructing the true evolutionary history of the Buzzing Flowerpecker (*Dicae
 * All input and output files associated with the ADMIXTURE runs presented in the text can be found in the folder named [admixture.mac](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/admixture.mac). Additionally, a vignette style walk through of the process can be viewed [here](https://devonderaad.github.io/phil.dicaeum.rad/admixture.mac/run.admixture.html).
 
 ### mtDNA phylogenetics
-* All input and output files associated mtDNA phylogenetic reconstructions can be found in the folder named [mtDNA.analyses]([https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/admixture.mac](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/mtDNA.analyses).
+* All input and output files associated mtDNA phylogenetic reconstructions can be found in the folder named [mtDNA.analyses](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/admixture.mac](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/mtDNA.analyses).
 
 ### IQ-TREE 2 reconstruction
 * The input and output files from the genomic phylogenetic reconstruction for all samples using IQ-TREE 2 can be found in the folder called [iqtree](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/iqtree). A detailed walkthrough of the entire process is available [here](https://devonderaad.github.io/phil.dicaeum.rad/iqtree/run.iqtree.html).
