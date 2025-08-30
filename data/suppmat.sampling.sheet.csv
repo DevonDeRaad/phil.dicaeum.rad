@@ -1,0 +1,61 @@
+ID,Museum,Tissue number,catalog number,Taxa,Locality,Latitude,Longitude
+D_hypoleucum_18191,KU,18191,112481,hypoleucum,Mindanao Island;  City of Zamboanga; Brgy. Pasonanca;  Pasonanca Nat. Park,7.018483,122.0273
+D_hypoleucum_18159,KU,18159,112478,hypoleucum,Mindanao Island;  City of Zamboanga; Brgy. Pasonanca;  Pasonanca Nat. Park,7.018483,122.0273
+D_hypoleucum_19177,KU,19177,113708,hypoleucum,Mindanao Island; Brgy. Tolosa; Sitio Santa Clara; Pasonanca Natural Park,7.1078,122.1195
+D_hypoleucum_19178,KU,19178,116869,hypoleucum,Mindanao Island; Brgy. Tolosa; Sitio Santa Clara; Pasonanca Natural Park,7.1078,122.1194
+D_hypoleucum_18193,KU,18193,112479,hypoleucum,Mindanao Island; City of Zamboanga; Brgy. Pasonanca;  Pasonanca Nat. Park,7.018483,122.0273
+D_hypoleucum_29945,KU,29945,122296,hypoleucum,Mindanao Island;  City of Zamboanga; Brgy. Pasonanca;  Pasonanca Nat. Park,7.164,122.096
+D_hypoleucum_29951,KU,29951,122297,hypoleucum,Mindanao Island;  City of Zamboanga; Brgy. Pasonanca;  Pasonanca Nat. Park,7.164,122.096
+D_hypoleucum_18070,KU,18070,112608,obscurum,Luzon Island; Municipality Labo; Barangay Tulay na Lupa; Mt. labo,14.039,122.786
+D_hypoleucum_20218,KU,20218,116368,obscurum,Luzon Island; Aurora Memorial National Park,15.6851,121.3407
+D_hypoleucum_20213,KU,20213,116901,obscurum,Luzon Island; Aurora Memorial National Park,15.6851,121.3407
+D_hypoleucum_FMNH454949,FMNH,-,454949,obscurum,Mt. Amnyao,17,121
+D_hypoleucum_25637,KU,25637,119214,obscurum,Luzon Island; Adams; Mt. Pao,18.438,120.878
+D_hypoleucum_25921,KU,25921,119587,obscurum,Luzon Island; Gonzaga; Mt. Cagua,18.219,122.111
+D_hypoleucum_26984,KU,26984,119589,obscurum,Luzon Island; Gonzaga; Mt. Cagua,18.219,122.111
+D_hypoleucum_462070,FMNH,-,462070,obscurum,Camarines Sur; Lagonoy,13.7644,123.64458
+D_hypoleucum_25675,KU,25675,,obscurum,Luzon Island; Adams; Mt. Pao,18.438,120.878
+D_hypoleucum_454950,FMNH,-,454950,obscurum,Mt. Amnyao,17,121
+D_hypoleucum_25880,KU,25880,119554,obscurum,Luzon Island; Gonzaga; Mt. Cagua,18.219,122.111
+D_hypoleucum_19638,KU,19638,114582,obscurum,Luzon Island;  Municipality of San Luis;  ca. 12 km WSW of Baler,15.64362,121.5149
+D_hypoleucum_25868,KU,25868,119585,obscurum,Luzon Island; Gonzaga; Mt. Cagua,18.219,122.111
+D_hypoleucum_17969,KU,17969,112606,obscurum,Luzon Island; Municipality Labo; Barangay Tulay na Lupa; Mt. labo,14.039,122.786
+D_hypoleucum_25672,KU,25672,119217,obscurum,Luzon Island; Adams; Mt. Pao,18.438,120.878
+D_hypoleucum_26975,KU,26975,119588,obscurum,Luzon Island; Gonzaga; Mt. Cagua,18.219,122.111
+D_hypoleucum_25670,KU,25670,119216,obscurum,Luzon Island; Adams; Mt. Pao,18.438,120.878
+D_hypoleucum_20193,KU,20193,116366,obscurum,Luzon Island;  Aurora Memorial National Park,15.6851,121.3407
+D_hypoleucum_14037,KU,14037,110596,pontifex,Dinagat Island;  Muncipality of Loreto; Brgy. Santiago,10.34368,125.6181
+D_hypoleucum_14079,KU,14079,110602,pontifex,Dinagat Island;  Muncipality of Loreto; Brgy. Santiago,10.34368,125.6181
+D_hypoleucum_14065,KU,14065,110373,pontifex,Dinagat Island;  Muncipality of Loreto; Brgy. Santiago,10.34368,125.6181
+D_hypoleucum_14120,KU,14120,110674,pontifex,Samar Island;  Muncipality of Taft; Brgy. San Rafael,11.828,125.276
+D_hypoleucum_14075,KU,14075,110601,pontifex,Dinagat Island;  Muncipality of Loreto; Brgy. Santiago,10.34368,125.6181
+D_hypoleucum_1271,CMC,1271,-,pontifex,Davao City;  Mt. Talomo,7.042,125.338
+D_hypoleucum_1273,CMC,1273,-,pontifex,Davao City;  Mt. Talomo,7.042,125.338
+D_hypoleucum_1275,CMC,1275,-,pontifex,Davao City;  Mt. Talomo,7.042,125.338
+D_hypoleucum_3274,CMC,3274,-,pontifex,Davao del Norte; Mt. Pasian,7.848,126.186
+D_hypoleucum_3208,CMC,3208,-,pontifex,Davao del Norte; Mt. Pasian,7.848,126.186
+D_hypoleucum_3158,CMC,3158,-,pontifex,Davao del Norte; Mt. Pasian,7.848,126.186
+D_hypoleucum_2253,CMC,2253,-,pontifex,Sarangani; Mt. Busa,6.109,124.666
+D_hypoleucum_3095,CMC,3095,-,pontifex,Davao del Norte; Mt. Pasian,7.848,126.186
+D_hypoleucum_3314,CMC,3314,-,pontifex,Davao del Norte; Mt. Pasian,7.848,126.186
+D_hypoleucum_357608,FMNH,-,357608,pontifex,Bukidnon;  Mt. Kitanglad Range,8,124.75
+D_hypoleucum_357615,FMNH,-,357615,pontifex,Bukidnon;  Mt. Kitanglad Range,8,124.75
+D_hypoleucum_357612,FMNH,-,357612,pontifex,Bukidnon;  Mt. Kitanglad Range,8,124.75
+D_hypoleucum_2229,CMC,2229,-,pontifex,Sarangani; Mt. Busa,6.109,124.666
+D_hypoleucum_2067,CMC,2067,-,pontifex,Sarangani; Mt. Busa,6.109,124.666
+D_hypoleucum_28329,KU,28329,122197,pontifex,Mindanao Island; Mt. Hilong-Hilong,9.075,125.665
+D_hypoleucum_28361,KU,28361,122199,pontifex,Mindanao Island; Mt. Hilong-Hilong,9.075,125.665
+D_hypoleucum_28376,KU,28376,122201,pontifex,Mindanao Island; Mt. Hilong-Hilong,9.075,125.665
+D_hypoleucum_2208,CMC,2208,-,pontifex,Sarangani; Mt. Busa,6.109,124.666
+D_hypoleucum_28294,KU,28294,122196,pontifex,Mindanao Island; Mt. Hilong-Hilong,9.075,125.665
+D_hypoleucum_1956,CMC,1956,-,pontifex,Sarangani; Mt. Busa,6.109,124.666
+D_hypoleucum_20921,KU,20921,116552,pontifex,Bohol Island; Rajah Sikatuna Protected Landscape,9.7056,124.1234
+D_hypoleucum_28416,KU,28416,122203,pontifex,Mindanao Island; Mt. Hilong-Hilong,9.075,125.665
+D_hypoleucum_27450,KU,27450,128384,pontifex,Southern Leyte; Hinunangan,10.405,125.131
+D_hypoleucum_19046,KU,19046,113137,pontifex,Mindanao Island; Mun. San Francisco; Brgy. Bayugan 2; Mt. Magdiwata,8.473,125.986
+D_hypoleucum_19136,KU,19136,117142,pontifex,Mindanao Island; Mt. Balatukan; Gingoog City; Brgy. Lunotan; Sitio San Isidro,8.7325,125.0035
+D_hypoleucum_28676,KU,28676,122266,pontifex,Mindanao: Misamis Oriental Prov.; Mt. Lumot,8.721,125.076
+D_hypoleucum_31636,KU,31636,123397,pontifex,Samar Island;  Muncipality of Taft; Brgy. San Rafael; DENR Field Station,11.828,125.276
+D_hypoleucum_31644,KU,31644,123396,pontifex,Samar Island;  Muncipality of Taft; Brgy. San Rafael; DENR Field Station,11.828,125.276
+D_nigrilore_KU28413,KU,28413,122205,nigrilore,,-,-
+D_nigrilore_KU28414,KU,28414,122206,nigrilore,,-,-
