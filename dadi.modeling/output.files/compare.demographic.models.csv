@@ -1,0 +1,9 @@
+﻿Model,AIC,delta_AIC,relative_likelihood,AIC weight
+sim_split_refugia_sym_mig_adjacent,1585.3,0,1,0.93086158
+split_symmig_adjacent,1590.5,5.2,0.074273578,0.06913842
+sim_split_sym_mig_adjacent,1649.2,63.9,1.33135E-14,1.2393E-14
+refugia_adj_2,1656,70.7,4.44314E-16,4.13595E-16
+admix_origin_no_mig,1692.7,107.4,4.76855E-24,4.43886E-24
+admix_origin_sym_mig_adj,1762,176.7,4.26661E-39,3.97162E-39
+sim_split_no_mig,1784.2,198.9,6.44783E-44,6.00204E-44
+split_nomig,2259.4,674.1,4.1787E-147,3.8898E-147
