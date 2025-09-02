@@ -54,5 +54,8 @@ Reconstructing the true evolutionary history of the Buzzing Flowerpecker (*Dicae
 * All input and output files for running [PhyloNet](https://phylogenomics.rice.edu/html/phylonet.html) can be found in the folder called [phylonet](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/phylonet).
 * A detailed walkthrough of the approach can be viewed [here](https://devonderaad.github.io/phil.dicaeum.rad/phylonet/runPhyloNet.html).
 
-### Demographic modeling with PipeMaster
+### Demographic modeling with PipeMaster (deprecated)
 * A comprehensive explanation of our custom pipeline for performing demographic modeling using the program [PipeMaster](https://github.com/gehara/PipeMaster) is available in the subdirectory called [pipemaster](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/pipemaster) which contains its own detailed 'readme' page.
+
+### Demographic modeling with Dadi
+* A comprehensive explanation how I used the program [dadi_pipeline](https://github.com/dportik/dadi_pipeline) is available in the subdirectory called [dadi.modeling](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/dadi.modeling) which contains its own detailed 'readme' page.
