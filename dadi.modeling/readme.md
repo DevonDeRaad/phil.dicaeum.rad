@@ -1,6 +1,6 @@
-### This repository holds all of the details for the dadi modeling portion of the manuscript.
+### This repository holds all details for the dadi modeling portion of the manuscript.
 
-This is a general outline of the steps that I took:
+This is a general outline of the steps that I took to perform demographic modeling using Daniel Portik's program 'dadi_pipeline' (https://github.com/dportik/dadi_pipeline)
 
 - **step 1**: Build a custom script, (here it is the file: 'step1.prepare.snps.file.R'), that will take an input vcf and calculate the SNP count file that is needed for input to the Portik pipeline. For me, that resulted in the file 'dicaeum.snps.file.txt'.
           
