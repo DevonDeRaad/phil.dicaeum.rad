@@ -28,5 +28,5 @@ This is a general outline of the steps that I took:
           
 - step 6: If you are interested in converting the estimated parameters for your best fit model into meaningful biological values,
           see this discussion: (https://github.com/dportik/dadi_pipeline/issues/5). Daniel Portik reccommends consulting the Dadi
-          user group for more details.
+          user group for more details. For this project I used the script 'scale.parameters.R' to perform conversions.
           
