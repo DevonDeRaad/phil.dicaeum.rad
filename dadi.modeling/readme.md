@@ -27,8 +27,8 @@ Additionally, each of these python scripts executing a given model has a corresp
 - **step 5**: If you would like to generate a single summary table showing the details of all of your model optimization protocols, you can use the script 'Summarize_Outputs.py' (found here: https://github.com/dportik/dadi_pipeline/blob/master/Three_Population_Pipeline/Summarize_Outputs.py) to do so. 
           
 - **step 6**: Visualize your best model using the python script 'Make_Plots.py' (available at: https://github.com/dportik/dadi_pipeline/blob/master/Plotting/Make_Plots.py). You will need to modify this script to include the details of your chosen model and the optimized parameter values you recovered. The unmodified script 'Plotting_Functions.py' (available at: https://github.com/dportik/dadi_pipeline/blob/master/Plotting/Plotting_Functions.py), which defines functions used internally in the plotting script, also needs to be present in the same directory where you execute 'Make_Plots.py' in order for it to work. The custom versions of the 'Make_Plots.py' scripts used here (which can be used to recreate the figures shown in the paper) are called:
-    * XXX
-    * 
+    * plot_sim_split_refugia_sym_mig_adjacent.py
+    * plot_split_symmig_adjacent.py
           
 - **step 7**: If you are interested in converting the estimated parameters for your best fit model into meaningful biological values,
           see this discussion: (https://github.com/dportik/dadi_pipeline/issues/5). Daniel Portik reccommends consulting the Dadi
