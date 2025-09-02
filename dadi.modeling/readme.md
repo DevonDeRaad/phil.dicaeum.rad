@@ -22,13 +22,13 @@ Additionally, each of these python scripts executing a given model has a corresp
     * run_admix_origin_no_mig.py
     * run_admix_origin_sym_mig_adj.py
           
-- **step 4**: Once all of your models have finished the entire optimization protocol, you can see the output in the output files that end with the suffix 'optimized.txt' (e.g., 'pop1_pop2_pop3.split_nomig.optimized.txt' holds relevant output for the model 'split_nomig').
+- **step 4**: Once all of your models have finished the entire optimization protocol, you can see the output in the output files that end with the suffix 'optimized.txt' (e.g., 'pop1_pop2_pop3.split_nomig.optimized.txt' holds relevant output for the model 'split_nomig'). All eight of these output files generated here can be found in the folder 'output.files'.
 
 - **step 5**: If you would like to generate a single summary table showing the details of all of your model optimization protocols, you can use the script 'Summarize_Outputs.py' (found here: https://github.com/dportik/dadi_pipeline/blob/master/Three_Population_Pipeline/Summarize_Outputs.py) to do so. 
           
 - **step 6**: Visualize your best model using the python script 'Make_Plots.py' (available at: https://github.com/dportik/dadi_pipeline/blob/master/Plotting/Make_Plots.py). You will need to modify this script to include the details of your chosen model and the optimized parameter values you recovered. The unmodified script 'Plotting_Functions.py' (available at: https://github.com/dportik/dadi_pipeline/blob/master/Plotting/Plotting_Functions.py), which defines functions used internally in the plotting script, also needs to be present in the same directory where you execute 'Make_Plots.py' in order for it to work. The custom versions of the 'Make_Plots.py' scripts used here (which can be used to recreate the figures shown in the paper) are called:
-            - XXX
-            - XXX 
+    * XXX
+    * 
           
 - **step 7**: If you are interested in converting the estimated parameters for your best fit model into meaningful biological values,
           see this discussion: (https://github.com/dportik/dadi_pipeline/issues/5). Daniel Portik reccommends consulting the Dadi
