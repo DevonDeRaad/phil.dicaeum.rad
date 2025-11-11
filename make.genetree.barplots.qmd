@@ -1,0 +1,281 @@
+---
+title: "barplots of gene tree frequencies"
+format:
+  html:
+    code-fold: show
+    code-tools: true
+toc: true
+toc-title: Document Contents
+number-sections: true
+embed-resources: true
+---
+
+### create dataframe
+```{r}
+#load
+library(ggplot2)
+
+#make dataframe with gene tree frequency info from ASTRAL
+df<-data.frame(topology=c("t1","t2","t3"),
+               count=c(904.7202982202967, 870.8566618566628, 814.4230399230413),
+               bs10.count=c(631.7068302068294, 578.9185906685893, 543.7142857142844),
+               bs30.count=c(540.6497113997103, 487.5183982683959, 453.5471380471368),
+               bs50.count=c(333.67652717652766, 301.319745069743, 274.095719095719),
+               nobusa.count=c(889.9681122448975, 880.0243764172336, 820.0075113378679),
+               nobusa.bs10.count=c(619.267573696145,591.6119614512484,548.963718820861),
+               nobusa.bs30.count=c(536.4526643990928,500.3058390022674,467.5833333333327),
+               nobusa.bs50.count=c(336.83290816326445,312.0617913832198,287.53585600906933))
+
+#convert counts into proportions
+df$freq<-df$count/2590
+df$bs10.freq<-df$bs10.count/1754.3397065897032
+df$bs30.freq<-df$bs30.count/1481.715247715243
+df$bs50.freq<-df$bs50.count/909.0919913419897
+df$nomtbusa.freq<-df$nobusa.count/2590
+df$nomtbusa.bs10.freq<-df$nobusa.bs10.count/1759.8432539682542
+df$nomtbusa.bs30.freq<-df$nobusa.bs30.count/1504.3418367346928
+df$nomtbusa.bs50.freq<-df$nobusa.bs50.count/936.4305555555536
+```
+
+
+### plot data
+```{r}
+#plot all samples
+ggplot(df, aes(x = topology, y = freq*100)) +
+  ylim(c(0,40)) +
+  geom_bar(stat = "identity") +
+  labs(x = "topology",
+       y = "gene tree frequency (%)") +
+  geom_text(aes(label = paste0(round(freq,3)*100,"%")),
+            vjust = -0.5, # Adjust vertical position (negative value moves it above)
+            size = 3) + # Adjust text size
+  geom_hline(yintercept = 33.333, linetype = "dashed") +
+  ggtitle("all samples no branch contraction") +
+  theme_classic()
+
+#plot all samples, bs > 10
+ggplot(df, aes(x = topology, y = bs10.freq*100)) +
+  ylim(c(0,40)) +
+  geom_bar(stat = "identity") +
+  labs(x = "topology",
+       y = "gene tree frequency (%)") +
+  geom_text(aes(label = paste0(round(bs10.freq,3)*100,"%")),
+            vjust = -0.5, # Adjust vertical position (negative value moves it above)
+            size = 3) + # Adjust text size
+  geom_hline(yintercept = 33.333, linetype = "dashed") +
+  ggtitle("all samples, < 10 bs support branch contraction") +
+  theme_classic()
+
+#plot all samples, bs > 30
+ggplot(df, aes(x = topology, y = bs30.freq*100)) +
+  ylim(c(0,40)) +
+  geom_bar(stat = "identity") +
+  labs(x = "topology",
+       y = "gene tree frequency (%)") +
+  geom_text(aes(label = paste0(round(bs30.freq,3)*100,"%")),
+            vjust = -0.5, # Adjust vertical position (negative value moves it above)
+            size = 3) + # Adjust text size
+  geom_hline(yintercept = 33.333, linetype = "dashed") +
+  ggtitle("all samples, < 30 bs support branch contraction") +
+  theme_classic()
+
+#plot all samples, bs > 50
+ggplot(df, aes(x = topology, y = bs50.freq*100)) +
+  ylim(c(0,40)) +
+  geom_bar(stat = "identity") +
+  labs(x = "topology",
+       y = "gene tree frequency (%)") +
+  geom_text(aes(label = paste0(round(bs50.freq,3)*100,"%")),
+            vjust = -0.5, # Adjust vertical position (negative value moves it above)
+            size = 3) + # Adjust text size
+  geom_hline(yintercept = 33.333, linetype = "dashed") +
+  ggtitle("all samples, < 50 bs support branch contraction") +
+  theme_classic()
+
+#plot with Mt Busa removed
+ggplot(df, aes(x = topology, y = nomtbusa.freq*100)) +
+  ylim(c(0,40)) +
+  geom_bar(stat = "identity") +
+  labs(x = "topology",
+       y = "gene tree frequency (%)") +
+  geom_text(aes(label = paste0(round(nomtbusa.freq,3)*100,"%")),
+            vjust = -0.5, # Adjust vertical position (negative value moves it above)
+            size = 3) + # Adjust text size
+  geom_hline(yintercept = 33.333, linetype = "dashed") +
+    ggtitle("no Mt. Busa, no contraction") +
+  theme_classic()
+
+#plot with Mt Busa removed & bs > 10
+ggplot(df, aes(x = topology, y = nomtbusa.bs10.freq*100)) +
+  ylim(c(0,40)) +
+  geom_bar(stat = "identity") +
+  labs(x = "topology",
+       y = "gene tree frequency (%)") +
+  geom_text(aes(label = paste0(round(nomtbusa.bs10.freq,3)*100,"%")),
+            vjust = -0.5, # Adjust vertical position (negative value moves it above)
+            size = 3) + # Adjust text size
+  geom_hline(yintercept = 33.333, linetype = "dashed") +
+    ggtitle("no Mt. Busa, < 10 bs support branch contraction") +
+  theme_classic()
+
+#plot with Mt Busa removed & bs > 30
+ggplot(df, aes(x = topology, y = nomtbusa.bs30.freq*100)) +
+  ylim(c(0,40)) +
+  geom_bar(stat = "identity") +
+  labs(x = "topology",
+       y = "gene tree frequency (%)") +
+  geom_text(aes(label = paste0(round(nomtbusa.bs30.freq,3)*100,"%")),
+            vjust = -0.5, # Adjust vertical position (negative value moves it above)
+            size = 3) + # Adjust text size
+  geom_hline(yintercept = 33.333, linetype = "dashed") +
+    ggtitle("no Mt. Busa, < 30 bs support branch contraction") +
+  theme_classic()
+
+#plot with Mt Busa removed & bs > 50
+ggplot(df, aes(x = topology, y = nomtbusa.bs50.freq*100)) +
+  ylim(c(0,40)) +
+  geom_bar(stat = "identity") +
+  labs(x = "topology",
+       y = "gene tree frequency (%)") +
+  geom_text(aes(label = paste0(round(nomtbusa.bs50.freq,3)*100,"%")),
+            vjust = -0.5, # Adjust vertical position (negative value moves it above)
+            size = 3) + # Adjust text size
+  geom_hline(yintercept = 33.333, linetype = "dashed") +
+    ggtitle("no Mt. Busa, < 50 bs support branch contraction") +
+  theme_classic()
+
+```
+
+### Save plots
+```{r}
+#plot all samples
+ggplot(df, aes(x = topology, y = freq*100)) +
+  ylim(c(0,40)) +
+  geom_bar(stat = "identity") +
+  labs(x = "topology",
+       y = "gene tree frequency (%)") +
+  geom_text(aes(label = paste0(round(freq,3)*100,"%")),
+            vjust = c(-.1,-.5,-1), # Adjust vertical position (negative value moves it above)
+            size = 3) + # Adjust text size
+  geom_hline(yintercept = 33.333, linetype = "dashed") +
+  ggtitle("all samples no branch contraction") +
+  theme_classic()
+
+#save
+#ggsave(filename = "~/Desktop/dicaeum.RADseq/allsamps.nocontract.barplot.pdf", width = 4, height = 2, units = "in")
+
+#plot all samples, bs > 10
+ggplot(df, aes(x = topology, y = bs10.freq*100)) +
+  ylim(c(0,40)) +
+  geom_bar(stat = "identity") +
+  labs(x = "topology",
+       y = "gene tree frequency (%)") +
+  geom_text(aes(label = paste0(round(bs10.freq,3)*100,"%")),
+            vjust = c(-.1,-.5,-1), # Adjust vertical position (negative value moves it above)
+            size = 3) + # Adjust text size
+  geom_hline(yintercept = 33.333, linetype = "dashed") +
+  ggtitle("all samples, < 10 bs support branch contraction") +
+  theme_classic()
+
+#save
+#ggsave(filename = "~/Desktop/dicaeum.RADseq/allsamps.bs10.barplot.pdf", width = 4, height = 2, units = "in")
+
+#plot all samples, bs > 30
+ggplot(df, aes(x = topology, y = bs30.freq*100)) +
+  ylim(c(0,40)) +
+  geom_bar(stat = "identity") +
+  labs(x = "topology",
+       y = "gene tree frequency (%)") +
+  geom_text(aes(label = paste0(round(bs30.freq,3)*100,"%")),
+            vjust = c(-.1,-.5,-1), # Adjust vertical position (negative value moves it above)
+            size = 3) + # Adjust text size
+  geom_hline(yintercept = 33.333, linetype = "dashed") +
+  ggtitle("all samples, < 30 bs support branch contraction") +
+  theme_classic()
+
+#save
+#ggsave(filename = "~/Desktop/dicaeum.RADseq/allsamps.bs30.barplot.pdf", width = 4, height = 2, units = "in")
+
+#plot all samples, bs > 50
+ggplot(df, aes(x = topology, y = bs50.freq*100)) +
+  ylim(c(0,40)) +
+  geom_bar(stat = "identity") +
+  labs(x = "topology",
+       y = "gene tree frequency (%)") +
+  geom_text(aes(label = paste0(round(bs50.freq,3)*100,"%")),
+            vjust = c(-.1,-.5,-1), # Adjust vertical position (negative value moves it above)
+            size = 3) + # Adjust text size
+  geom_hline(yintercept = 33.333, linetype = "dashed") +
+  ggtitle("all samples, < 50 bs support branch contraction") +
+  theme_classic()
+
+#save
+#ggsave(filename = "~/Desktop/dicaeum.RADseq/allsamps.bs50.barplot.pdf", width = 4, height = 2, units = "in")
+
+#plot with Mt Busa removed
+ggplot(df, aes(x = topology, y = nomtbusa.freq*100)) +
+  ylim(c(0,40)) +
+  geom_bar(stat = "identity") +
+  labs(x = "topology",
+       y = "gene tree frequency (%)") +
+  geom_text(aes(label = paste0(round(nomtbusa.freq,3)*100,"%")),
+            vjust = c(-.1,-.5,-1), # Adjust vertical position (negative value moves it above)
+            size = 3) + # Adjust text size
+  geom_hline(yintercept = 33.333, linetype = "dashed") +
+    ggtitle("no Mt. Busa, no contraction") +
+  theme_classic()
+
+#save
+#ggsave(filename = "~/Desktop/dicaeum.RADseq/nomtbusa.nocontract.barplot.pdf", width = 4, height = 2, units = "in")
+
+#plot with Mt Busa removed & bs > 10
+ggplot(df, aes(x = topology, y = nomtbusa.bs10.freq*100)) +
+  ylim(c(0,40)) +
+  geom_bar(stat = "identity") +
+  labs(x = "topology",
+       y = "gene tree frequency (%)") +
+  geom_text(aes(label = paste0(round(nomtbusa.bs10.freq,3)*100,"%")),
+            vjust = c(-.1,-.5,-1), # Adjust vertical position (negative value moves it above)
+            size = 3) + # Adjust text size
+  geom_hline(yintercept = 33.333, linetype = "dashed") +
+    ggtitle("no Mt. Busa, < 10 bs support branch contraction") +
+  theme_classic()
+
+#save
+#ggsave(filename = "~/Desktop/dicaeum.RADseq/nomtbusa.bs10.barplot.pdf", width = 4, height = 2, units = "in")
+
+#plot with Mt Busa removed & bs > 30
+ggplot(df, aes(x = topology, y = nomtbusa.bs30.freq*100)) +
+  ylim(c(0,40)) +
+  geom_bar(stat = "identity") +
+  labs(x = "topology",
+       y = "gene tree frequency (%)") +
+  geom_text(aes(label = paste0(round(nomtbusa.bs30.freq,3)*100,"%")),
+            vjust = c(-.1,-.5,-1), # Adjust vertical position (negative value moves it above)
+            size = 3) + # Adjust text size
+  geom_hline(yintercept = 33.333, linetype = "dashed") +
+    ggtitle("no Mt. Busa, < 30 bs support branch contraction") +
+  theme_classic()
+
+#save
+#ggsave(filename = "~/Desktop/dicaeum.RADseq/nomtbusa.bs30.barplot.pdf", width = 4, height = 2, units = "in")
+
+#plot with Mt Busa removed & bs > 50
+ggplot(df, aes(x = topology, y = nomtbusa.bs50.freq*100)) +
+  ylim(c(0,40)) +
+  geom_bar(stat = "identity") +
+  labs(x = "topology",
+       y = "gene tree frequency (%)") +
+  geom_text(aes(label = paste0(round(nomtbusa.bs50.freq,3)*100,"%")),
+            vjust = c(-.1,-.5,-1), # Adjust vertical position (negative value moves it above)
+            size = 3) + # Adjust text size
+  geom_hline(yintercept = 33.333, linetype = "dashed") +
+    ggtitle("no Mt. Busa, < 50 bs support branch contraction") +
+  theme_classic()
+
+#save
+#ggsave(filename = "~/Desktop/dicaeum.RADseq/nomtbusa.bs50.barplot.pdf", width = 4, height = 2, units = "in")
+
+
+```
+
