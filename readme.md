@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/572267063.svg)](https://doi.org/10.5281/zenodo.17583589)
+
 # The following repository holds all data and code for the manuscript:
 Rapid divergence with gene flow creates intractable nodes in the tree of life: An empirical demonstration in the Buzzing Flowerpecker (*Dicaeum hypoleucum*)
 - Lead author: Devon DeRaad (devonderaad@gmail.com)
