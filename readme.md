@@ -1,5 +1,5 @@
 # The following repository holds all data and code for the manuscript:
-Reconstructing the true evolutionary history of the Buzzing Flowerpecker (*Dicaeum hypoleucum*) despite extensive incomplete lineage sorting and ongoing gene flow.
+Rapid divergence with gene flow creates intractable nodes in the tree of life: An empirical demonstration in the Buzzing Flowerpecker (*Dicaeum hypoleucum*)
 - Lead author: Devon DeRaad (devonderaad@gmail.com)
 
 ### Data availability
@@ -59,3 +59,6 @@ Reconstructing the true evolutionary history of the Buzzing Flowerpecker (*Dicae
 
 ### Demographic modeling with Dadi
 * A comprehensive explanation how I used the program [dadi_pipeline](https://github.com/dportik/dadi_pipeline) is available in the subdirectory called [dadi.modeling](https://github.com/DevonDeRaad/phil.dicaeum.rad/tree/main/dadi.modeling) which contains its own detailed 'readme' page.
+
+### Visualizing gene tree frequencies
+* A walkthrough of how I used the quartet frequencies output by ATRAL to visualize and compare gene tree frequencies across filtering schemes, using ggplot, can be viewed [here](https://devonderaad.github.io/phil.dicaeum.rad/make.genetree.barplots.html).
